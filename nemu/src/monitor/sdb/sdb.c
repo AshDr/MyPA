@@ -55,9 +55,13 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_si(char *args) {
-  // char *arg = strtok(args, " ");
-  Log("%s ",args);
-  // cpu_exec(1);
+  if(args == NULL) {
+    cpu_exec(1);
+  }
+  else {
+    char *arg = strtok(args, " ");
+    if(arg != NULL) Log("%s",arg);
+  }
   return 0;
 }
 
