@@ -13,11 +13,14 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include <ctype.h>
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <readline/chardefs.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <stdint.h>
 #include <utils.h>
 
 static int is_batch_mode = false;
@@ -60,7 +63,15 @@ static int cmd_si(char *args) {
   }
   else {
     char *arg = strtok(args, " ");
-    if(arg != NULL) Log("%s",arg);
+    uint64_t sum = 0;
+    for(int i = 0; i < strlen(arg); i++) {
+      if(!isdigit(arg[i])) {
+        printf("Paramater should be digit!\n");
+        return 0;
+      }
+      sum = sum * 10 + arg[i] - '0';
+    }
+    printf("%lu\n", sum);
   }
   return 0;
 }
