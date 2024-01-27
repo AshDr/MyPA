@@ -15,6 +15,8 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
+#include <generated/autoconf.h>
+#include <utils.h>
 
 void init_rand();
 void init_log(const char *log_file);
