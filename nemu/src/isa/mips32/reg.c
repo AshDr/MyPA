@@ -15,7 +15,6 @@
 
 #include <isa.h>
 #include "local-include/reg.h"
-#include "macro.h"
 
 const char *regs[] = {
   "$0", "at", "v0", "v1", "a0", "a1", "a2", "a3",
