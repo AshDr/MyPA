@@ -42,7 +42,7 @@ static struct rule {
   {"-",TK_SUB},
   {"\\*",TK_MUL},
   {"\\/",TK_DIV},
-  {"\\d+",TK_NUM},
+  {"[0-9]+",TK_NUM},
 };
 
 #define NR_REGEX ARRLEN(rules)
