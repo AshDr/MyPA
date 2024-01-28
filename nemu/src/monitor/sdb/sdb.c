@@ -77,8 +77,8 @@ static int cmd_si(char *args) {
 }
 static int cmd_info(char *args) {
   char *arg = strtok(args, " ");
-  printf("%s !\n", arg);
   if(strcmp(arg, "r")) {
+    printf("%s !\n", arg);
     isa_reg_display();
   }
   else if(strcmp(arg, "w")) {
