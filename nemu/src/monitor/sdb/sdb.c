@@ -60,7 +60,11 @@ static int cmd_q(char *args) {
 static int cmd_test_token(char *args) {
   bool flag = true;
   word_t val = expr(args,&flag);
-  printf(ANSI_FMT("Expression result: %u\n", ANSI_FG_RED), val);
+  if(!flag) {
+    printf(ANSI_FMT("Runtime Error during evalute expression\n", ANSI_FG_RED));
+  }else {
+    printf(ANSI_FMT("Expression result: %u\n", ANSI_FG_GREEN), val);
+  }
   return 0;
 }
 static int cmd_si(char *args) {
