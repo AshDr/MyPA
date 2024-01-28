@@ -19,13 +19,14 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <stdlib.h>
 #include <string.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-  TK_SUB,TK_PLUS,TK_MUL,TK_DIV,TK_NUM
   /* TODO: Add more token types */
-
+  TK_SUB,TK_PLUS,TK_MUL,TK_DIV,TK_NUM,
+  TK_LBR,TK_RBR,TK_REG,TK_VAR
 };
 
 static struct rule {
@@ -44,6 +45,10 @@ static struct rule {
   {"\\*",TK_MUL},
   {"\\/",TK_DIV},
   {"[0-9]+",TK_NUM},
+  {"\\(", TK_LBR},
+  {"\\)", TK_RBR},
+  {"\\$\\w+", TK_REG},
+  {"[A-Za-z_]\\w*", TK_VAR},
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -120,13 +125,83 @@ static bool make_token(char *e) {
   return true;
 }
 
-
+bool check_parentheses(int p, int q) {
+  if(tokens[p].type == TK_LBR && tokens[q].type == TK_RBR) {
+    int sum = 0;
+    for(int i = p; i < q; i++) {
+      if(tokens[i].type == TK_LBR) ++sum;
+      else if(tokens[i].type == TK_RBR) --sum;
+      if(sum < 0) return false;
+    }
+    return sum == 0;    
+  }
+  return false;
+}
+bool is_arithmetic(int tp) {
+  if(tp == TK_EQ || tp == TK_NUM || tp == TK_LBR || tp == TK_RBR) return false;
+  return true;
+}
+int get_level(int tp) {
+  if(tp == TK_PLUS || tp == TK_SUB) return 1;
+  if(tp == TK_MUL || tp == TK_DIV) return 2;
+  return 3;
+}
+int find_major(int p, int q) { // can not be () form
+  int pos = -1,prelv = 100;
+  for(int i = p; i <= q; i++) {
+    if(is_arithmetic(tokens[i].type)) {
+      if(get_level(tokens[i].type) < prelv) {
+        prelv = get_level(tokens[i].type);
+        pos = i;
+      }
+    }
+  }
+  Assert(pos != -1, "Major pos find error! At range (%d, %d)", p, q);
+  return pos;
+}
+word_t eval(int p, int q, bool *ok) {
+  // *ok = true;
+  if(p > q) {
+    *ok = false;
+    return 0;
+  }
+  else if(p == q) {
+    if(tokens[p].type != TK_NUM) {
+      *ok = false;
+      return 0;
+    }
+    word_t res = strtol(tokens[p].str, NULL, 10);
+    return res;
+  }else if(check_parentheses(p, q) == true) {
+    return eval(p + 1, q - 1, ok);
+  }else {
+    int mpos = find_major(p, q);
+    word_t val1 = eval(p, mpos - 1, ok),val2 = eval(mpos + 1, q, ok);
+    int op_tp = tokens[mpos].type;
+    switch (op_tp) {
+      case TK_PLUS: {
+        return val1 + val2;
+      }
+      case TK_SUB: {
+        return val1 - val2;
+      }
+      case TK_MUL: {
+        return val1 * val2;
+      }
+      case TK_DIV: {
+        //divided by zero ?
+        return val1 / val2;
+      }
+      default: panic("Wrong major operator at range(%d, %d), mpos is %d", p, q, mpos);
+    }
+  }
+}
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-
+  eval(0, nr_token - 1, success);
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
 

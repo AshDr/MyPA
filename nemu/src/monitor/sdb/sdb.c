@@ -58,7 +58,7 @@ static int cmd_q(char *args) {
   return -1;
 }
 static int cmd_test_token(char *args) {
-  bool flag = false;
+  bool flag = true;
   expr(args,&flag);
   return 0;
 }
