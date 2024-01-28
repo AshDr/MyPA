@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include "local-include/reg.h"
+#include "macro.h"
 
 const char *regs[] = {
   "$0", "at", "v0", "v1", "a0", "a1", "a2", "a3",
@@ -24,6 +25,9 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  for(int i = 0; i < ARRLEN(regs); i++) {
+    printf("%s %x %u\n", reg_name(i), gpr(i), gpr(i));
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {

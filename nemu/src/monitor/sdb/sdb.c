@@ -71,7 +71,7 @@ static int cmd_si(char *args) {
       }
       sum = sum * 10 + arg[i] - '0';
     }
-    printf("%lu\n", sum);
+    cpu_exec(sum);
   }
   return 0;
 }
