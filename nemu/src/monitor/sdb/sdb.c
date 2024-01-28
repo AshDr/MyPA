@@ -76,13 +76,17 @@ static int cmd_si(char *args) {
   }
   return 0;
 }
+static void gao() {
+  printf("test gao!\n");
+}
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
     printf("Usage: info r (registers) or info w (watchpoints)\n");
   } else {
     if (strcmp(arg, "r") == 0) {
-      isa_reg_display();
+      // isa_reg_display();
+      gao();
     } else if (strcmp(arg, "w") == 0) {
       // todo
     } else {
