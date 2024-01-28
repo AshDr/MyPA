@@ -42,8 +42,7 @@ static struct rule {
   {"-",TK_SUB},
   {"\\*",TK_MUL},
   {"\\/",TK_DIV},
-  {"\\d+",TK_NUM}
-
+  {"\\d+",TK_NUM},
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -98,9 +97,9 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         // tokens[nr_token++] = rules[i];
-        switch (rules[i].token_type) {
-          default: TODO();
-        }
+        // switch (rules[i].token_type) {
+        //   default: TODO();
+        // }
 
         break;
       }
