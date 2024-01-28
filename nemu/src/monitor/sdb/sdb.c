@@ -83,7 +83,7 @@ static int cmd_info(char *args) {
     printf("Usage: info r (registers) or info w (watchpoints)\n");
   } else {
     if (strcmp(arg, "r") == 0) {
-      // isa_reg_display();
+      isa_reg_display();
       gao();
     } else if (strcmp(arg, "w") == 0) {
       // todo

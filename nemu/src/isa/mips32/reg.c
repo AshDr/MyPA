@@ -23,15 +23,8 @@ const char *regs[] = {
   "t8", "t9", "k0", "k1", "gp", "sp", "s8", "ra"
 };
 
-void gao() {
-  printf("test gao in reg.c\n");
-}
 void isa_reg_display() {
-  int reg_num = ARRLEN(regs);
-  int i;
-  for (i = 0; i < reg_num; i++) {
-    printf("%-8s%-#20x%-20d\n", regs[i], cpu.gpr[i], cpu.gpr[i]);
-  }
+  
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
