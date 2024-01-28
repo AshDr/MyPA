@@ -78,11 +78,11 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   char *arg = strtok(args, " ");
   if(strcmp(arg, "r") == 0) {
-    printf("%s !\n", arg);
+    printf("%s !!\n", arg);
     isa_reg_display();
   }
   else if(strcmp(arg, "w") == 0) {
-    
+
   }else {
     printf("Paramater should be r or w!\n");
   }
