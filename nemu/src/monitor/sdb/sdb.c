@@ -76,9 +76,7 @@ static int cmd_si(char *args) {
   }
   return 0;
 }
-static void gao() {
-  printf("test gao!\n");
-}
+
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
