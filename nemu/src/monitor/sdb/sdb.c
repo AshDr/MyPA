@@ -84,7 +84,6 @@ static int cmd_info(char *args) {
   } else {
     if (strcmp(arg, "r") == 0) {
       isa_reg_display();
-      gao();
     } else if (strcmp(arg, "w") == 0) {
       // todo
     } else {
