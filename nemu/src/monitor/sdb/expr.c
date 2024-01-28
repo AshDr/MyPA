@@ -22,7 +22,7 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-
+  TK_SUB,TK_PLUS,TK_MUL,TK_DIV,TK_NUM
   /* TODO: Add more token types */
 
 };
@@ -37,8 +37,13 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
+  {"-",TK_SUB},
+  {"\\*",TK_MUL},
+  {"\\/",TK_DIV},
+  {"\\d+",TK_NUM}
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -66,7 +71,6 @@ typedef struct token {
   int type;
   char str[32];
 } Token;
-
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
@@ -93,7 +97,7 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        // tokens[nr_token++] = rules[i];
         switch (rules[i].token_type) {
           default: TODO();
         }
@@ -119,7 +123,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  // TODO();
 
   return 0;
 }

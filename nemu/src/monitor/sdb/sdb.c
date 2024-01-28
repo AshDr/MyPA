@@ -57,7 +57,11 @@ static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;
   return -1;
 }
-
+static int cmd_test_token(char *args) {
+  bool flag = false;
+  expr(args,&flag);
+  return 0;
+}
 static int cmd_si(char *args) {
   if(args == NULL) {
     cpu_exec(1);
@@ -147,8 +151,8 @@ static struct {
   {"info", "Show information", cmd_info},
   {"x", "Usage: x N EXPR. Scan the memory from EXPR by N bytes", cmd_x},
   {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p },
+  {"tt","Test token", cmd_test_token},
   /* TODO: Add more commands */
-
 };
 
 #define NR_CMD ARRLEN(cmd_table)
