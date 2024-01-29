@@ -146,11 +146,13 @@ bool is_arithmetic(int tp) {
   if(tp == TK_EQ || tp == TK_NUM || tp == TK_LBR || tp == TK_RBR) return false;
   return true;
 }
+
 int get_level(int tp) {
   if(tp == TK_PLUS || tp == TK_SUB) return 1;
   if(tp == TK_MUL || tp == TK_DIV) return 2;
   return 3;
 }
+
 int find_major(int p, int q) { // can not be () form
   int pos = -1,prelv = 100;
   int pnum = 0;
@@ -158,7 +160,7 @@ int find_major(int p, int q) { // can not be () form
     if(tokens[i].type == TK_LBR) ++pnum;
     else if(tokens[i].type == TK_RBR) --pnum;
     else if(is_arithmetic(tokens[i].type)) {
-      if(pnum == 0 && get_level(tokens[i].type) < prelv) {
+      if(pnum == 0 && get_level(tokens[i].type) <= prelv) {
         prelv = get_level(tokens[i].type);
         pos = i;
       }
@@ -172,6 +174,7 @@ int find_major(int p, int q) { // can not be () form
   }
   return pos;
 }
+
 word_t eval(int p, int q, bool *ok) {
   // *ok = true;
   // printf("(%d %d)\n", p, q);
@@ -197,13 +200,13 @@ word_t eval(int p, int q, bool *ok) {
     switch (op_tp) {
       case TK_PLUS: {
         return val1 + val2;
-      }
+      }break;
       case TK_SUB: {
         return val1 - val2;
-      }
+      }break;
       case TK_MUL: {
         return val1 * val2;
-      }
+      }break;
       case TK_DIV: {
         //divided by zero ?
         if(val2 == 0) {
@@ -212,7 +215,7 @@ word_t eval(int p, int q, bool *ok) {
           return 0;
         }
         return val1 / val2; // e.g (1 - 2) / 2 should be 0 not 2147483647, because we generate test case and the result of test case if 0
-      }
+      }break;
       default: panic("Wrong major operator at range(%d, %d), mpos is %d", p, q, mpos);
     }
   }
