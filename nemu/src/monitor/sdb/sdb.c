@@ -192,11 +192,11 @@ void sdb_mainloop() {
   }else {
     while(fgets(buffer, sizeof(buffer), file) != NULL) {
       buffer[strcspn(buffer, "\n")] = '\0';
-      printf("%s", buffer);
+      printf("%s\n", buffer);
       char *args = strtok(buffer, " ");
       if(args == NULL) continue;
       args = strtok(NULL, " ");
-      // cmd_p(args);
+      cmd_p(args);
     }
     fclose(file);
   }
