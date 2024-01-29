@@ -178,12 +178,32 @@ static int cmd_help(char *args) {
 void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
-
+char buffer[65536];
 void sdb_mainloop() {
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
   }
+  /* Add test case here*/
+  FILE *file = fopen("/home/ashdr/code/ics2023/nemu/tools/gen-expr/build/input", "r");
+  if(file == NULL) {
+    Log("Open expr test file failed!\n");
+  }else {
+    while(fgets(buffer, sizeof(buffer), file) != NULL) {
+      printf("%s", buffer);
+      char *args = strtok(buffer, " ");
+      if(args == NULL) continue;
+      printf("real value: %s\n", args);
+      args = strtok(NULL, " ");
+      printf("expr: %s\n", args);
+      cmd_p(args);
+    }
+    fclose(file);
+  }
+
+
+
+
 
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
