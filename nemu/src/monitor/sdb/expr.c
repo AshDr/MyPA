@@ -174,7 +174,7 @@ int find_major(int p, int q) { // can not be () form
 }
 word_t eval(int p, int q, bool *ok) {
   // *ok = true;
-  printf("(%d %d)\n", p, q);
+  // printf("(%d %d)\n", p, q);
   if(p > q) {
     *ok = false;
     return 0;
@@ -187,7 +187,7 @@ word_t eval(int p, int q, bool *ok) {
     word_t res = strtol(tokens[p].str, NULL, 10);
     return res;
   }else if(check_parentheses(p, q) == true) {
-    Log("check_parentheses(%d %d) is ok\n", p, q);
+    // Log("check_parentheses(%d %d) is ok\n", p, q);
     return eval(p + 1, q - 1, ok);
   }else {
     int mpos = find_major(p, q);
@@ -218,6 +218,7 @@ word_t eval(int p, int q, bool *ok) {
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
+    printf(ANSI_FMT("Make token faied!\n", ANSI_FG_RED));
     return 0;
   }
   for(int i = 0; i < nr_token; i++) {
