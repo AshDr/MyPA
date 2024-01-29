@@ -193,7 +193,7 @@ void sdb_mainloop() {
     while(fgets(buffer, sizeof(buffer), file) != NULL) {
       printf("%s", buffer);
       int len = strlen(buffer);
-      printf("%d\n",len);
+      buffer[len] = '\0';
       char *args = strtok(buffer, " ");
       if(args == NULL) continue;
       args = strtok(NULL, " ");
