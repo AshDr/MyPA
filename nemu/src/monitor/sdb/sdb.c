@@ -57,7 +57,7 @@ static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;
   return -1;
 }
-static int cmd_test_token(char *args) {
+static int cmd_p(char *args) {
   bool flag = true;
   word_t val = expr(args,&flag);
   if(!flag) {
@@ -131,16 +131,6 @@ static int cmd_x(char *args) {
   return 0;
 }
 
-static int cmd_p(char* args) {
-  bool success;
-  word_t res = expr(args, &success);
-  if (!success) {
-    puts("invalid expression");
-  } else {
-    printf("%u\n", res);
-  }
-  return 0;
-}
 
 static int cmd_help(char *args);
 
@@ -156,7 +146,7 @@ static struct {
   {"info", "Show information", cmd_info},
   {"x", "Usage: x N EXPR. Scan the memory from EXPR by N bytes", cmd_x},
   {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p },
-  {"tt","Test token", cmd_test_token},
+  {"tt","Test token", cmd_p},
   /* TODO: Add more commands */
 };
 

@@ -17,7 +17,7 @@
 #include <cpu/cpu.h>
 
 void sdb_mainloop();
-char buffer[10000];
+char buffer[65536];
 void engine_start() {
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
@@ -29,6 +29,11 @@ void engine_start() {
   }else {
     while(fgets(buffer, sizeof(buffer), file) != NULL) {
       printf("%s", buffer);
+      char *args = strtok(buffer, " ");
+      if(args == NULL) continue;
+      printf("arg1: %s", args);
+      args = strtok(NULL, " ");
+      printf("arg2: %s", args);
     }
     fclose(file);
   }
