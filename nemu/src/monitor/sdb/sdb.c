@@ -57,11 +57,13 @@ static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;
   return -1;
 }
+int cnt = 0;
 static int cmd_p(char *args) {
   bool flag = true;
   word_t val = expr(args,&flag);
   printf("args: %s\n", args);
   if(!flag) {
+    ++cnt;
     printf(ANSI_FMT("Runtime Error during evalute expression\n", ANSI_FG_RED));
   }else {
     printf(ANSI_FMT("Expression result: %u\n", ANSI_FG_GREEN), val);
@@ -200,8 +202,7 @@ void sdb_mainloop() {
     }
     fclose(file);
   }
-
-
+  printf("Wrong expr cnt: %d\n", cnt);
 
 
 
