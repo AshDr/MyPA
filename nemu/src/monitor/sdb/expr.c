@@ -207,7 +207,7 @@ word_t eval(int p, int q, bool *ok) {
       case TK_DIV: {
         //divided by zero ?
         if(val2 == 0) {
-          printf(ANSI_FMT("Divided by zero!\n", ANSI_FG_RED));
+          printf(ANSI_FMT("Divided by zero!(%d,%d)\n", ANSI_FG_RED),p, q);
           *ok = false;
           return 0;
         }
