@@ -193,9 +193,7 @@ void sdb_mainloop() {
       printf("%s", buffer);
       char *args = strtok(buffer, " ");
       if(args == NULL) continue;
-      printf("real value: %s\n", args);
       args = strtok(NULL, " ");
-      printf("expr: %s\n", args);
       cmd_p(args);
     }
     fclose(file);
