@@ -180,7 +180,7 @@ word_t eval(int p, int q, bool *ok) {
     word_t res = strtol(tokens[p].str, NULL, 10);
     return res;
   }else if(check_parentheses(p, q) == true) {
-    printf("check_parentheses(%d %d) is ok\n", p, q);
+    Log("check_parentheses(%d %d) is ok\n", p, q);
     return eval(p + 1, q - 1, ok);
   }else {
     int mpos = find_major(p, q);
