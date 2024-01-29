@@ -198,6 +198,7 @@ void sdb_mainloop() {
       if(args == NULL) continue;
       args = strtok(NULL, " ");
       cmd_p(args);
+      memset(buffer, 0, sizeof buffer);
     }
     fclose(file);
   }
