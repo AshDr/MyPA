@@ -150,9 +150,12 @@ int get_level(int tp) {
 }
 int find_major(int p, int q) { // can not be () form
   int pos = -1,prelv = 100;
+  int pnum = 0;
   for(int i = p; i <= q; i++) {
-    if(is_arithmetic(tokens[i].type)) {
-      if(get_level(tokens[i].type) < prelv) {
+    if(tokens[i].type == TK_LBR) ++pnum;
+    else if(tokens[i].type == TK_RBR) --pnum;
+    else if(is_arithmetic(tokens[i].type)) {
+      if(pnum == 0 && get_level(tokens[i].type) < prelv) {
         prelv = get_level(tokens[i].type);
         pos = i;
       }
