@@ -13,6 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include "common.h"
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -190,7 +191,11 @@ word_t eval(int p, int q, bool *ok) {
       }
       case TK_DIV: {
         //divided by zero ?
-        return val1 / val2;
+        if(val2 == 0) {
+          *ok = false;
+          return 0;
+        }
+        return (sword_t)val1 / (sword_t)val2; // e.g (1 - 2) / 2 should be 0 not 2147483647, because we generate test case and the result of test case if 0
       }
       default: panic("Wrong major operator at range(%d, %d), mpos is %d", p, q, mpos);
     }

@@ -13,15 +13,25 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#include "debug.h"
 #include <cpu/cpu.h>
 
 void sdb_mainloop();
-
+char buffer[10000];
 void engine_start() {
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);
 #else
   /* Receive commands from user. */
+  FILE *file = fopen("/home/ashdr/code/ics2023/nemu/tools/gen-expr/build/input", "r");
+  if(file == NULL) {
+    Log("Open expr test file failed!\n");
+  }else {
+    while(fgets(buffer, sizeof(buffer), file) != NULL) {
+      printf("%s", buffer);
+    }
+    fclose(file);
+  }
   sdb_mainloop();
 #endif
 }
