@@ -192,10 +192,19 @@ void sdb_mainloop() {
   }else {
     while(fgets(buffer, sizeof(buffer), file) != NULL) {
       printf("%s", buffer);
-      char *args = strtok(buffer, " ");
-      if(args == NULL) continue;
-      args = strtok(NULL, " ");
-      cmd_p(args);
+      int f = 0;
+      for(int i = 0; i < sizeof(buffer); i++) {
+        if(buffer[i] == '\0') {
+          printf("find \\0\n");
+          f = 1;
+          break;
+        }
+      }
+      if(!f) printf("can not find \\0 \n");
+      // char *args = strtok(buffer, " ");
+      // if(args == NULL) continue;
+      // args = strtok(NULL, " ");
+      // cmd_p(args);
     }
     fclose(file);
   }
