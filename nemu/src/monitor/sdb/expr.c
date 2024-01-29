@@ -159,7 +159,12 @@ int find_major(int p, int q) { // can not be () form
       }
     }
   }
-  Assert(pos != -1, "Major pos find error! At range (%d, %d)", p, q);
+  if(pos == -1) {
+    for(int i = p; i <= q; i++) {
+      printf("%s  ", tokens[i].str);
+    }
+    Assert(pos != -1, "Major pos find error! At range (%d, %d)", p, q);
+  }
   return pos;
 }
 word_t eval(int p, int q, bool *ok) {
@@ -197,7 +202,7 @@ word_t eval(int p, int q, bool *ok) {
           *ok = false;
           return 0;
         }
-        return (sword_t)val1 / (sword_t)val2; // e.g (1 - 2) / 2 should be 0 not 2147483647, because we generate test case and the result of test case if 0
+        return val1 / val2; // e.g (1 - 2) / 2 should be 0 not 2147483647, because we generate test case and the result of test case if 0
       }
       default: panic("Wrong major operator at range(%d, %d), mpos is %d", p, q, mpos);
     }
