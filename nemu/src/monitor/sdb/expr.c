@@ -131,7 +131,7 @@ static bool make_token(char *e) {
 bool check_parentheses(int p, int q) {
   if(tokens[p].type == TK_LBR && tokens[q].type == TK_RBR) {
     int sum = 0;
-    for(int i = p; i < q; i++) {
+    for(int i = p; i <= q; i++) {
       if(tokens[i].type == TK_LBR) ++sum;
       else if(tokens[i].type == TK_RBR) --sum;
       if(sum < 0) return false;
