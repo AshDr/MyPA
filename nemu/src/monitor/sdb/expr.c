@@ -181,6 +181,7 @@ word_t eval(int p, int q, bool *ok) {
   }
   else if(p == q) {
     if(tokens[p].type != TK_NUM) {
+      printf(ANSI_FMT("Type error!\n", ANSI_FG_RED));
       *ok = false;
       return 0;
     }
@@ -206,6 +207,7 @@ word_t eval(int p, int q, bool *ok) {
       case TK_DIV: {
         //divided by zero ?
         if(val2 == 0) {
+          printf(ANSI_FMT("Divided by zero!\n", ANSI_FG_RED));
           *ok = false;
           return 0;
         }
