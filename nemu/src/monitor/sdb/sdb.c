@@ -60,6 +60,7 @@ static int cmd_q(char *args) {
 static int cmd_p(char *args) {
   bool flag = true;
   word_t val = expr(args,&flag);
+  printf("args: %s\n", args);
   if(!flag) {
     printf(ANSI_FMT("Runtime Error during evalute expression\n", ANSI_FG_RED));
   }else {
