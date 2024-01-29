@@ -192,15 +192,8 @@ void sdb_mainloop() {
   }else {
     while(fgets(buffer, sizeof(buffer), file) != NULL) {
       printf("%s", buffer);
-      // int f = 0;
-      // for(int i = 0; i < sizeof(buffer); i++) {
-      //   if(buffer[i] == '\0') {
-      //     printf("find \\0\n");
-      //     f = 1;
-      //     break;
-      //   }
-      // }
-      // if(!f) printf("can not find \\0 \n");
+      int len = strlen(buffer);
+      printf("%d\n",len);
       char *args = strtok(buffer, " ");
       if(args == NULL) continue;
       args = strtok(NULL, " ");
