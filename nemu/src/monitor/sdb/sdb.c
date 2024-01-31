@@ -152,7 +152,6 @@ static int cmd_w(char *args) {
   if(flag == false) {
     printf(ANSI_FMT("Bad expression for watchpoint!\n", ANSI_FG_RED));
   }
-  Log("Start set wp");
   set_watch_point(args, val);
   return 0;
 }

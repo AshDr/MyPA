@@ -49,7 +49,7 @@ void free_wp(int NO) {
     printf("No used wp rignt now.\n");
     return ;
   }
-
+  Log("Here");
   if(cur->NO == NO) {
     head = head->next;
     cur->next = free_;
