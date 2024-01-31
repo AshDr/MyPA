@@ -55,7 +55,7 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;
-  return 0;
+  return -1;
 }
 
 int cnt = 0;
@@ -140,6 +140,11 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  init_wp_pool();
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -155,6 +160,7 @@ static struct {
   {"info", "Show information", cmd_info},
   {"x", "Usage: x N EXPR. Scan the memory from EXPR by N bytes", cmd_x},
   {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p },
+  {"w", "Usage: w EXPR. Add watchpoint on input expression.",cmd_w},
   /* TODO: Add more commands */
 };
 

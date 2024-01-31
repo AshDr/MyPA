@@ -22,8 +22,8 @@ typedef struct watchpoint {
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
-  char* name;
-  uint32_t old_value,new_value;
+  char* expr;
+  uint32_t old_value;
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -52,6 +52,7 @@ WP* new_wp() {
   free_ = free_->next;
   return res; 
 }
+
 void free_wp(WP *wp) {
   WP *cur = head, *prev = NULL;
   if(cur == wp) {
@@ -69,5 +70,21 @@ void free_wp(WP *wp) {
     cur = cur->next;
   }
   panic("Free watchpoint error!\n");
+}
+
+void wp_difftest() {
+  WP* h = head;
+  while (h) {
+    bool _;
+    word_t new_val = expr(h->expr, &_);
+    if (h->old_value != new_val) {
+      printf("Watchpoint %d: %s\n"
+        "Old value = %u\n"
+        "New value = %u\n"
+        , h->NO, h->expr, h->old_value, new_val);
+          h->old_value = new_val;
+    }
+    h = h->next;
+  }
 }
 
