@@ -192,7 +192,17 @@ word_t eval(int p, int q, bool *ok) {
     else if(tokens[p].type == TK_HEX) {
       word_t res = strtol(tokens[p].str, NULL, 16);
       return res;
-    }else {
+    }
+    else if(tokens[p].type == TK_REG) {
+        bool flag = true;
+        word_t res = isa_reg_str2val(tokens[p].str, &flag);
+        if(flag == false) {
+          *ok = false;
+          return 0;
+        }
+        return res;
+    }
+    else {
       printf(ANSI_FMT("Type error!\n", ANSI_FG_RED));
       *ok = false;
       return 0;
@@ -234,13 +244,11 @@ word_t expr(char *e, bool *success) {
     printf(ANSI_FMT("Make token faied!\n", ANSI_FG_RED));
     return 0;
   }
-  return 0;
+  // return 0;
   for(int i = 0; i < nr_token; i++) {
     printf("%s",tokens[i].str);
   }
   puts("");
   /* TODO: Insert codes to evaluate the expression. */
-  // TODO();
-  return eval(0, nr_token - 1, success);;
+  return eval(0, nr_token - 1, success);
 }
-//
