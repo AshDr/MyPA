@@ -84,7 +84,7 @@ void iterate_wp() {
     printf(ANSI_FMT("NO watchpoint\n", ANSI_FG_BLUE));
     return ;
   }
-  printf("%-8s%-8s%-8s\n", "Num", "Expression","Value");
+  printf("%-8s%-8s%-8s\n", "Num", "Expr","Value");
   while (h) {
     printf("%-8d%-8s%-8u\n", h->NO, h->expr, h->old_value);
     h = h->next;
@@ -96,6 +96,7 @@ void wp_difftest() {
   WP* h = head;
   while (h) {
     bool _;
+    printf("Current expr: %s\n", h->expr);
     word_t new_val = expr(h->expr, &_);
     if (h->old_value != new_val) {
       printf("Watchpoint %d: %s\n"

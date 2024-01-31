@@ -180,7 +180,7 @@ int find_major(int p, int q) { // can not be () form
 
 word_t eval(int p, int q, bool *ok) {
   // *ok = true;
-  printf("(%d %d)\n", p, q);
+  // printf("(%d %d)\n", p, q);
   if(p > q) {
     printf(ANSI_FMT("Range error! (%d, %d)\n", ANSI_FG_RED), p, q);
     *ok = false;
