@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include "common.h"
+#include "memory/vaddr.h"
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -145,7 +146,7 @@ bool check_parentheses(int p, int q) {
   return false;
 }
 bool is_arithmetic(int tp) {
-  if(tp == TK_EQ || tp == TK_NUM || tp == TK_LBR || tp == TK_RBR || tp == TK_HEX) return false;
+  if(tp == TK_NUM || tp == TK_LBR || tp == TK_RBR || tp == TK_HEX) return false;
   return true;
 }
 
@@ -213,8 +214,14 @@ word_t eval(int p, int q, bool *ok) {
     return eval(p + 1, q - 1, ok);
   }else {
     int mpos = find_major(p, q);
-    word_t val1 = eval(p, mpos - 1, ok),val2 = eval(mpos + 1, q, ok);
     int op_tp = tokens[mpos].type;
+    word_t val1 = 0, val2 = 0; 
+    if(op_tp == TK_DREF) {
+      val2 = eval(mpos + 1, q, ok);
+    }else {
+      val1= eval(p, mpos - 1, ok),val2 = eval(mpos + 1, q, ok);
+    }
+    
     switch (op_tp) {
       case TK_PLUS: {
         return val1 + val2;
@@ -234,6 +241,9 @@ word_t eval(int p, int q, bool *ok) {
         }
         return val1 / val2; // e.g (1 - 2) / 2 should be 0 not 2147483647, because we generate test case and the result of test case if 0
       }break;
+      case TK_DREF:{
+          return vaddr_read(val2, 4); //get uint32_t from ram
+      }
       default: panic("Wrong major operator at range(%d, %d), mpos is %d", p, q, mpos);
     }
   }
@@ -243,6 +253,11 @@ word_t expr(char *e, bool *success) {
     *success = false;
     printf(ANSI_FMT("Make token faied!\n", ANSI_FG_RED));
     return 0;
+  }
+  for (int i = 0; i < nr_token; i ++) {
+    if (tokens[i].type == '*' && (i == 0 || is_arithmetic(tokens[i - 1].type))) {
+      tokens[i].type = TK_DREF;
+    }
   }
   // return 0;
   for(int i = 0; i < nr_token; i++) {
