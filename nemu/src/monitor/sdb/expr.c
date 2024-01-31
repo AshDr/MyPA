@@ -198,6 +198,7 @@ word_t eval(int p, int q, bool *ok) {
         bool flag = true;
         word_t res = isa_reg_str2val(tokens[p].str, &flag);
         if(flag == false) {
+          printf(ANSI_FMT("Reg error!\n", ANSI_FG_RED));
           *ok = false;
           return 0;
         }
