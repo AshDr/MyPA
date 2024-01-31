@@ -70,13 +70,18 @@ void set_watch_point(char *expr, word_t val) {
   WP *wp = new_wp();
   strcpy(wp->expr, expr);
   wp->old_value = val;
+  if(head == NULL) head = wp;
+  else {
+    wp->next = head;
+    head = wp;
+  }
   return ;  
 }
 
 void iterate_wp() {
   WP *h = head;
   if(h == NULL) {
-    printf(ANSI_FMT("NO watchpoint", ANSI_FG_BLUE));
+    printf(ANSI_FMT("NO watchpoint\n", ANSI_FG_BLUE));
     return ;
   }
   printf("%-8s%-8s%-8s\n", "Num", "Expression","Value");
