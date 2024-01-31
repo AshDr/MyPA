@@ -182,7 +182,7 @@ word_t eval(int p, int q, bool *ok) {
   // *ok = true;
   // printf("(%d %d)\n", p, q);
   if(p > q) {
-    printf(ANSI_FMT("Range error!\n", ANSI_FG_RED));
+    printf(ANSI_FMT("Range error! (%d, %d)\n", ANSI_FG_RED), p, q);
     *ok = false;
     return 0;
   }
