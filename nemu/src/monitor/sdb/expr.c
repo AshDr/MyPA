@@ -153,7 +153,7 @@ bool is_arithmetic(int tp) {
 int get_level(int tp) {
   if(tp == TK_PLUS || tp == TK_SUB) return 1;
   if(tp == TK_MUL || tp == TK_DIV) return 2;
-  return 3;
+  return 3; // TK_DREF
 }
 
 int find_major(int p, int q) { // can not be () form
@@ -180,7 +180,7 @@ int find_major(int p, int q) { // can not be () form
 
 word_t eval(int p, int q, bool *ok) {
   // *ok = true;
-  // printf("(%d %d)\n", p, q);
+  printf("(%d %d)\n", p, q);
   if(p > q) {
     printf(ANSI_FMT("Range error! (%d, %d)\n", ANSI_FG_RED), p, q);
     *ok = false;
