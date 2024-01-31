@@ -101,6 +101,10 @@ void wp_difftest() {
   while (h) {
     bool _;
     word_t new_val = expr(h->expr, &_);
+    printf("Watchpoint %d: %s\n"
+        "Old value = %u\n"
+        "New value = %u\n"
+        , h->NO, h->expr, h->old_value, new_val);
     if (h->old_value != new_val) {
       printf("Watchpoint %d: %s\n"
         "Old value = %u\n"
