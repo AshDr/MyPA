@@ -50,7 +50,7 @@ static struct rule {
   {"[0-9]+",TK_NUM},
   {"\\(", TK_LBR},
   {"\\)", TK_RBR},
-  {"\\$[$]\\w+", TK_REG},
+  {"\\$[$]?\\w+", TK_REG},
   {"[A-Za-z_]\\w*", TK_VAR},
   
 };
