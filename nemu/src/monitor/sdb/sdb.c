@@ -150,9 +150,11 @@ static int cmd_w(char *args) {
   bool flag = true;
   word_t val = expr(args, &flag);
   if(flag == false) {
-    printf(ANSI_FMT("Bad expression for watchpoint!\n", ANSI_FG_RED));
+    printf(ANSI_FMT("Invalid expression for watchpoint!\n", ANSI_FG_RED));
+  }else {
+    set_watch_point(args, val);
+
   }
-  set_watch_point(args, val);
   return 0;
 }
 

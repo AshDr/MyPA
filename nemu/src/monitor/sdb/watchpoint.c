@@ -49,7 +49,6 @@ void free_wp(int NO) {
     printf("No used wp rignt now.\n");
     return ;
   }
-  Log("Here");
   if(cur->NO == NO) {
     head = head->next;
     cur->next = free_;
@@ -69,6 +68,7 @@ void free_wp(int NO) {
 
 void set_watch_point(char *expr, word_t val) {
   WP *wp = new_wp();
+  Log("Here");
   strcpy(wp->expr, expr);
   wp->old_value = val;
   return ;  
