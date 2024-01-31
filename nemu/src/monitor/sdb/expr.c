@@ -40,7 +40,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {"\\(uint32_t\\)",TK_SIGN},
-  {"0[xX][0-9A-Fa-f]+$",TK_HEX},
+  {"0[xX][0-9A-Fa-f]+",TK_HEX},
   {" +", TK_NOTYPE},    // spaces
   {"\\+", TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
