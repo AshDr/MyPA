@@ -19,6 +19,5 @@
 #include <common.h>
 
 word_t expr(char *e, bool *success);
-void wp_difftest();
 
 #endif

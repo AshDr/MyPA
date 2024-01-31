@@ -20,6 +20,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "watchpoint.h"
 #include <stdint.h>
 #include <utils.h>
 #include <memory/vaddr.h>
@@ -104,6 +105,7 @@ static int cmd_info(char *args) {
       isa_reg_display();
     } else if (strcmp(arg, "w") == 0) {
       // todo
+      iterate_wp();
     } else {
       printf("Usage: info r (registers) or info w (watchpoints)\n");
     }
@@ -141,10 +143,24 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-  init_wp_pool();
+  if(args == NULL) {
+    printf("Need expression!\n");
+    return 0;
+  }
+  bool flag = true;
+  word_t val = expr(args, &flag);
+  if(flag == false) {
+    printf(ANSI_FMT("Bad expression for watchpoint!\n", ANSI_FG_RED));
+  }
+  set_watch_point(args, val);
   return 0;
 }
 
+static int cmd_d(char *args) {
+  int no = strtol(args, NULL, 10);
+  free_wp(no);
+  return 0;
+}
 
 static int cmd_help(char *args);
 
@@ -161,6 +177,7 @@ static struct {
   {"x", "Usage: x N EXPR. Scan the memory from EXPR by N bytes", cmd_x},
   {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p },
   {"w", "Usage: w EXPR. Add watchpoint on input expression.",cmd_w},
+  {"d", "Usage: Delete watchpoint.", cmd_d}
   /* TODO: Add more commands */
 };
 
