@@ -33,8 +33,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   const char *reals = s + 1; 
   for(int i = 0; i < reg_num; i++) {
     if(strcmp(reals, regs[i]) == 0) {
-      printf("%-#20x%-20u\n", gpr(i), gpr(i));
-      return 0;
+      // printf("%-#20x%-20u\n", gpr(i), gpr(i));
+      return gpr(i);
     }
   }
   *success = false;
