@@ -57,10 +57,15 @@ static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;
   return -1;
 }
+
 int cnt = 0;
 static int cmd_p(char *args) {
   bool flag = true;
   word_t val = expr(args,&flag);
+  if(args == NULL) {
+    printf("Args is NULL\n");
+    return 0;
+  }
   printf("args: %s\n", args);
   if(!flag) {
     ++cnt;
@@ -70,6 +75,7 @@ static int cmd_p(char *args) {
   }
   return 0;
 }
+
 static int cmd_si(char *args) {
   if(args == NULL) {
     cpu_exec(1);
@@ -149,7 +155,6 @@ static struct {
   {"info", "Show information", cmd_info},
   {"x", "Usage: x N EXPR. Scan the memory from EXPR by N bytes", cmd_x},
   {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p },
-  {"tt","Test token", cmd_p},
   /* TODO: Add more commands */
 };
 
