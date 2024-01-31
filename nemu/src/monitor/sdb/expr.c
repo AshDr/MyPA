@@ -145,7 +145,7 @@ bool check_parentheses(int p, int q) {
   return false;
 }
 bool is_arithmetic(int tp) {
-  if(tp == TK_EQ || tp == TK_NUM || tp == TK_LBR || tp == TK_RBR) return false;
+  if(tp == TK_EQ || tp == TK_NUM || tp == TK_LBR || tp == TK_RBR || tp == TK_HEX) return false;
   return true;
 }
 
@@ -185,13 +185,19 @@ word_t eval(int p, int q, bool *ok) {
     return 0;
   }
   else if(p == q) {
-    if(tokens[p].type != TK_NUM) {
+    if(tokens[p].type == TK_NUM) {
+      word_t res = strtol(tokens[p].str, NULL, 10);
+      return res;
+    }
+    else if(tokens[p].type == TK_HEX) {
+      word_t res = strtol(tokens[p].str, NULL, 16);
+      return res;
+    }else {
       printf(ANSI_FMT("Type error!\n", ANSI_FG_RED));
       *ok = false;
       return 0;
     }
-    word_t res = strtol(tokens[p].str, NULL, 10);
-    return res;
+    
   }else if(check_parentheses(p, q) == true) {
     // Log("check_parentheses(%d %d) is ok\n", p, q);
     return eval(p + 1, q - 1, ok);

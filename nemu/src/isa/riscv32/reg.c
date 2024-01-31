@@ -22,14 +22,21 @@ const char *regs[] = {
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
-
+static int reg_num = ARRLEN(regs);
 void isa_reg_display() {
-  int reg_num = ARRLEN(regs);
   for (int i = 0; i < reg_num; i++) {
-    printf("%-8s%-#20x%-20d\n", regs[i], gpr(i), gpr(i));
+    printf("%-8s%-#20x%-20u\n", regs[i], gpr(i), gpr(i));
   }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  
+  for(int i = 0; i < reg_num; i++) {
+    if(strcmp(s, regs[i]) == 0) {
+      printf("%-#20x%-20u\n", gpr(i),gpr(i));
+      return 0;
+    }
+  }
+  success = false;
   return 0;
 }
