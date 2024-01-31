@@ -27,7 +27,8 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
   /* TODO: Add more token types */
   TK_SUB,TK_PLUS,TK_MUL,TK_DIV,TK_NUM,
-  TK_LBR,TK_RBR,TK_REG,TK_VAR,TK_SIGN
+  TK_LBR,TK_RBR,TK_REG,TK_VAR,TK_SIGN,
+  TK_AND,TK_NEQ,TK_DREF,TK_HEX
 };
 
 static struct rule {
@@ -39,6 +40,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {"\\(uint32_t\\)",TK_SIGN},
+  {"^0[xX][0-9A-Fa-f]+$",TK_HEX},
   {" +", TK_NOTYPE},    // spaces
   {"\\+", TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
@@ -226,6 +228,7 @@ word_t expr(char *e, bool *success) {
     printf(ANSI_FMT("Make token faied!\n", ANSI_FG_RED));
     return 0;
   }
+  return 0;
   for(int i = 0; i < nr_token; i++) {
     printf("%s",tokens[i].str);
   }
