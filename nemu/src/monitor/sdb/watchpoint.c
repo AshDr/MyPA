@@ -69,9 +69,12 @@ void free_wp(int NO) {
 void set_watch_point(char *expr, word_t val) {
   WP *wp = new_wp();
   strcpy(wp->expr, expr);
-  printf("-------------WPEXPR: %s", wp->expr);
+  printf("-------------WPEXPR: %s\n", wp->expr);
   wp->old_value = val;
-  if(head == NULL) head = wp;
+  if(head == NULL) {
+    head = wp;
+    head->next = NULL;
+  }
   else {
     wp->next = head;
     head = wp;
