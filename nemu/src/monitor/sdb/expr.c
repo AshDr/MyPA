@@ -151,6 +151,7 @@ bool is_arithmetic(int tp) {
 }
 
 int get_level(int tp) {
+  if(tp == TK_EQ) return 0;
   if(tp == TK_PLUS || tp == TK_SUB) return 1;
   if(tp == TK_MUL || tp == TK_DIV) return 2;
   return 3; // TK_DREF
@@ -233,6 +234,9 @@ word_t eval(int p, int q, bool *ok) {
       }break;
       case TK_MUL: {
         return val1 * val2;
+      }break;
+      case TK_EQ:{
+        return val1 == val2;
       }break;
       case TK_DIV: {
         //divided by zero ?
