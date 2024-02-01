@@ -35,7 +35,7 @@ $(OBJ_DIR)/%.o: %.c
 	$(call call_fixdep, $(@:.o=.d), $@)
 
 $(OBJ_DIR)/%.i: %.c
-	@echo + CC $<
+	@echo + CC .i $<
 	@$(CC) -E $< -o $@
 
 $(OBJ_DIR)/%.o: %.cc
