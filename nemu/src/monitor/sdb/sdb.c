@@ -218,21 +218,21 @@ void sdb_mainloop() {
     return;
   }
   /* Add test case here*/
-  FILE *file = fopen("/home/ashdr/code/ics2023/nemu/tools/gen-expr/build/input", "r");
-  if(file == NULL) {
-    Log("Open expr test file failed!\n");
-  }else {
-    while(fgets(buffer, sizeof(buffer), file) != NULL) {
-      buffer[strcspn(buffer, "\n")] = '\0';
-      printf("%s\n", buffer);
-      char *args = strtok(buffer, " ");
-      if(args == NULL) continue;
-      args = strtok(NULL, " ");
-      cmd_p(args);
-    }
-    fclose(file);
-  }
-  printf("Wrong expr cnt: %d\n", cnt);
+  // FILE *file = fopen("/home/ashdr/code/ics2023/nemu/tools/gen-expr/build/input", "r");
+  // if(file == NULL) {
+  //   Log("Open expr test file failed!\n");
+  // }else {
+  //   while(fgets(buffer, sizeof(buffer), file) != NULL) {
+  //     buffer[strcspn(buffer, "\n")] = '\0';
+  //     printf("%s\n", buffer);
+  //     char *args = strtok(buffer, " ");
+  //     if(args == NULL) continue;
+  //     args = strtok(NULL, " ");
+  //     cmd_p(args);
+  //   }
+  //   fclose(file);
+  // }
+  // printf("Wrong expr cnt: %d\n", cnt);
 
 
 
