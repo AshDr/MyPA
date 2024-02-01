@@ -34,9 +34,11 @@ $(OBJ_DIR)/%.o: %.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	$(call call_fixdep, $(@:.o=.d), $@)
 
+
 $(OBJ_DIR)/%.i: %.c
 	@echo + CC .i $<
 	@$(CC) -E $< -o $@
+
 
 $(OBJ_DIR)/%.o: %.cc
 	@echo + CXX $<
@@ -47,7 +49,10 @@ $(OBJ_DIR)/%.o: %.cc
 # Depencies
 -include $(OBJS:.o=.d)
 
+-include $(OBJS:.o=.i) #new
+
 # Some convenient rules
+
 
 .PHONY: app clean
 
