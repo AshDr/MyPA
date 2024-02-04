@@ -34,10 +34,12 @@ $(OBJ_DIR)/%.o: %.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	$(call call_fixdep, $(@:.o=.d), $@)
 
+$(OBJ_DIR)/%o: %c
+	@$(CC) $(CFLAGS) $(SO) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(SO) -E -MF /dev/null $< | \
+		grep -ve '^#' | \
+		clang-format - > $(basename $0).i
 
-$(OBJ_DIR)/%.i: %.c
-	@echo + CC .i $<
-	@$(CC) -E $< -o $@
 
 
 $(OBJ_DIR)/%.o: %.cc
@@ -49,7 +51,6 @@ $(OBJ_DIR)/%.o: %.cc
 # Depencies
 -include $(OBJS:.o=.d)
 
--include $(OBJS:.o=.i) #new
 
 # Some convenient rules
 
