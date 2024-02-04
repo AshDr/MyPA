@@ -35,6 +35,7 @@ $(OBJ_DIR)/%.o: %.c
 	$(call call_fixdep, $(@:.o=.d), $@)
 
 $(OBJ_DIR)/%o: %c
+	@echo + .i CC $<
 	@$(CC) $(CFLAGS) $(SO) -c -o $@ $<
 	@$(CC) $(CFLAGS) $(SO) -E -MF /dev/null $< | \
 		grep -ve '^#' | \
