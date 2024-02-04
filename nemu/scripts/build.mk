@@ -32,7 +32,9 @@ $(OBJ_DIR)/%.o: %.c
 	@echo + CC $<
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	@$(CC) $(CFLAGS) -E $<
+	@$(CC) $(CFLAGS) $(SO) -E -MF /dev/null $< | \
+		grep -ve '^#' | \
+		clang-format - > $(basename $@).i
 	$(call call_fixdep, $(@:.o=.d), $@)
 
 
