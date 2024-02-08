@@ -50,6 +50,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   }
   printf("!!!\n");
   printf("rs1: %u, rs2: %u, rd: %u , type: %d \n", rs1, rs2, *rd, type);
+  printf("TYPE_I: %d\n", TYPE_I);
   switch (type) {
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
