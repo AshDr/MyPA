@@ -49,6 +49,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
       printf("%d", (i >> o) & 1); // 逐位打印
   }
   printf("!!!\n");
+  printf("rs1: %u, rs2: %u, rd: %u \n", rs1, rs2, *rd);
   switch (type) {
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
