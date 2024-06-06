@@ -59,6 +59,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   Log("src1: %u, src2: %u, imm:%u", *src1, *src2, *imm);
 }
 
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -71,6 +72,9 @@ static int decode_exec(Decode *s) {
   // printf("%u!", INSTPAT_INST(s));
   
   INSTPAT_START();
+  //TODO
+  //add
+  //seqz
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (src1 + imm) & ~(word_t)1; R(rd) = s->pc + 4);
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
