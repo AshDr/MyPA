@@ -69,7 +69,7 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
-  // printf("%u!", INSTPAT_INST(s));
+  printf("%u!", INSTPAT_INST(s));
   
   INSTPAT_START();
   //TODO
