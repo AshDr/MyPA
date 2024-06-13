@@ -61,7 +61,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_B: src1R(); src2R(); immB(); break;
     case TYPE_R: src1R(); src2R(); break;
   }
-  Log("Address: %u, src1: %u, src2: %u, imm:%u", s->pc, *src1, *src2, *imm);
+  Log("Address: %x, src1: %u, src2: %u, imm:%u", s->pc, *src1, *src2, *imm);
   if(type == TYPE_B) {
     printf(ANSI_FMT("This B type command jump to: %x\n", ANSI_FG_RED), s->pc + *imm);
   }
