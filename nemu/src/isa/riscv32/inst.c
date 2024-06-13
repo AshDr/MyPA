@@ -82,7 +82,7 @@ static int decode_exec(Decode *s) {
   printf("%u!", INSTPAT_INST(s));
   
   INSTPAT_START();
-  //TODO:
+  //TODO: mulh
 
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = SEXT(Mr(src1 + imm, 4), 32));
   //lh signed?
