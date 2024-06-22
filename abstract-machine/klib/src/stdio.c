@@ -70,6 +70,7 @@ int sprintf(char *out, const char *fmt, ...) {
     }else {
       *out++ = *p;
     }
+    ++p;
   }
   *out = '\0';
   va_end(ap);
