@@ -74,7 +74,7 @@ int sprintf(char *out, const char *fmt, ...) {
   }
   *out = '\0';
   va_end(ap);
-  return 0; // 如果成功，则返回写入的字符总数，不包括字符串追加在字符串末尾的空字符。如果失败，则返回一个负数
+  return strlen(fmt); // 如果成功，则返回写入的字符总数，不包括字符串追加在字符串末尾的空字符。如果失败，则返回一个负数
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
