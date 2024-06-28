@@ -17,6 +17,7 @@
 #include <memory/paddr.h>
 #include <generated/autoconf.h>
 #include <utils.h>
+#include <cpu/iringbuf.h>
 
 void init_rand();
 void init_log(const char *log_file);
@@ -128,6 +129,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Initialize the simple debugger. */
   init_sdb();
+
+  /* Initialize the ring buf*/
+  init_IRingBuf();
 
 #ifndef CONFIG_ISA_loongarch32r
   IFDEF(CONFIG_ITRACE, init_disasm(
