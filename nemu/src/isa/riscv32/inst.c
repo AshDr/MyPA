@@ -50,10 +50,10 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
-  for(int o = sizeof(uint32_t) * 8 - 1; o >= 0; --o) {
-      printf("%d", (i >> o) & 1); // 逐位打印
-  }
-  puts("");
+  // for(int o = sizeof(uint32_t) * 8 - 1; o >= 0; --o) {
+  //     printf("%d", (i >> o) & 1); // 逐位打印
+  // }
+  // puts("");
   // printf("!!!\n");
   // printf("rs1: %u, rs2: %u, rd: %u , type: %d \n", rs1, rs2, *rd, type);
   switch (type) {
