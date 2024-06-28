@@ -53,6 +53,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   for(int o = sizeof(uint32_t) * 8 - 1; o >= 0; --o) {
       printf("%d", (i >> o) & 1); // 逐位打印
   }
+  puts("");
   // printf("!!!\n");
   // printf("rs1: %u, rs2: %u, rd: %u , type: %d \n", rs1, rs2, *rd, type);
   switch (type) {
