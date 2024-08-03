@@ -9,6 +9,7 @@ static FILE *ftrace_log = NULL;
         if (ftrace_log == NULL) { \
             ftrace_log = fopen("~/nemu_trace.log", "w"); \
         } \
+        assert(ftrace_log != NULL); \
         fprintf(ftrace_log, __VA_ARGS__); \
         fflush(ftrace_log); \
     } while (0)
