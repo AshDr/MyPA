@@ -7,7 +7,7 @@ static FILE *ftrace_log = NULL;
 #define ftrace_write(...) \
     do { \
         if (ftrace_log == NULL) { \
-            ftrace_log = fopen("~/nemu_trace.log", "w"); \
+            ftrace_log = fopen("/home/ashdr/code/ics2023/nemu/build/ftrace-log.txt", "w"); \
         } \
         assert(ftrace_log != NULL); \
         fprintf(ftrace_log, __VA_ARGS__); \
