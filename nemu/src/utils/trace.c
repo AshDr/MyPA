@@ -16,7 +16,7 @@ static FILE *ftrace_log = NULL;
 
 void trace_func_call(paddr_t pc, paddr_t target) {
     assert(call_depth >= 0);
-    ftrace_write(FMT_PADDR ": %*scall[%s@" FMT_PADDR "]\n", pc, call_depth, "", "funcname",target);
+    ftrace_write(FMT_PADDR ": %*scall[%s@" FMT_PADDR "]\n", pc, call_depth * 2, "", "funcname",target);
     ++call_depth;
 }
 
