@@ -73,5 +73,8 @@ uint64_t get_time();
     log_write(__VA_ARGS__); \
   } while (0)
 
+void trace_func_call(paddr_t pc, paddr_t target);
+
+void trace_func_ret(paddr_t pc);
 
 #endif
