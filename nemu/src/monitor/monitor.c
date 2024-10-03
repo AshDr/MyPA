@@ -72,7 +72,7 @@ static long load_img() {
 }
 static void init_ftrace() {
   Log("ftrace start");
-  // parse_elf(elf_file);
+  parse_elf(elf_file);
 }
 
 static int parse_args(int argc, char *argv[]) {
