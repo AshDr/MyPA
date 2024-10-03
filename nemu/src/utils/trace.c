@@ -177,12 +177,12 @@ void trace_func_call(paddr_t pc, paddr_t target) {
     assert(call_depth >= 0);
     ++call_depth;
     int funcid = get_func_idx(target);
-    ftrace_write(FMT_PADDR ": %*scall[%s@" FMT_PADDR "]\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name, target);
+    ftrace_write(FMT_PADDR ": %*scall[%s@" FMT_PADDR "]%d\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name, target,call_depth);
 }
 
 void trace_func_ret(paddr_t pc) {
     int funcid = get_func_idx(pc);
-    ftrace_write(FMT_PADDR ": %*sret[%s]\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name);
+    ftrace_write(FMT_PADDR ": %*sret[%s]%d\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name,call_depth);
     --call_depth;
 }
 
