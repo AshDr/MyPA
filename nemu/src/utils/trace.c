@@ -119,7 +119,7 @@ static void read_symbol_table(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[], in
     ftrace_write("====================================================\n");
     int func_cnt = 0;
     for (int i = 0; i < sym_cnt; i++) {
-        if(ELF32_ST_TYPE(sym_tbl[i].st_info) == STT_SECTION) {
+        if(ELF32_ST_TYPE(sym_tbl[i].st_info) == STT_SECTION || ELF32_ST_TYPE(sym_tbl[i].st_info) == STT_NOTYPE) {
             continue;
         }
         ftrace_write(" %-3d    %08x %-4d %-10d %s\n",
