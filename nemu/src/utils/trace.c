@@ -110,7 +110,7 @@ static void read_symbol_table(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[], in
     Elf32_Sym sym_tbl[shdr_tbl[symbol_idx].sh_size / sizeof(Elf32_Sym)];
     read_section(fd, shdr_tbl[symbol_idx], sym_tbl);
     int str_tab_idx = shdr_tbl[symbol_idx].sh_link;
-    char str_tab[shdr_tbl[str_tab_idx].sh_size]; // 所有symbol的name
+    char str_tab[shdr_tbl[str_tab_idx].sh_size]; // 除section外所有symbol的name
     read_section(fd, shdr_tbl[str_tab_idx], str_tab);
     int sym_cnt = shdr_tbl[symbol_idx].sh_size / sizeof(Elf32_Sym);
     ftrace_write("Symbol count: %d\n", sym_cnt);
@@ -119,7 +119,7 @@ static void read_symbol_table(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[], in
     ftrace_write("====================================================\n");
     int func_cnt = 0;
     for (int i = 0; i < sym_cnt; i++) {
-        ftrace_write(" %-3d    %016x %-4d %-10d %s\n",
+        ftrace_write(" %-3d    %08x %-4d %-10d %s\n",
         i,
         sym_tbl[i].st_value, 
         ELF32_ST_TYPE(sym_tbl[i].st_info),
