@@ -83,6 +83,7 @@ static void read_section_header(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[]) 
 
 static void display_section_header(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[]) {
     char sh_str[shdr_tbl[ehdr.e_shstrndx].sh_size]; // 使用一个大小为section name table大小的字节数组，即里面存放的是所有section的名字
+    read_section(fd, shdr_tbl[ehdr.e_shstrndx], sh_str);
     ftrace_write("========================================");
 	ftrace_write("========================================\n");
 	ftrace_write(" idx offset     load-addr  size       algn"
