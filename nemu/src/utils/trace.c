@@ -76,7 +76,7 @@ static void read_section(int fd, Elf32_Shdr shdr, void *dst) {
 static void read_section_header(int fd, Elf32_Ehdr ehdr, Elf32_Shdr shdr_tbl[]) {
     assert(lseek(fd, ehdr.e_shoff, SEEK_SET) == ehdr.e_shoff);
     for(int i = 0; i < ehdr.e_shnum; ++i) {
-        assert(read(fd, &shdr_tbl[i], ehdr.e_shentsize) == ehdr.e_shentsize);
+        assert(read(fd, (void *)&shdr_tbl[i], ehdr.e_shentsize) == ehdr.e_shentsize);
     }
     // 把每个section table entry都读到内存中
 }
