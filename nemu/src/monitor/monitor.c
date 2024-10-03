@@ -71,7 +71,7 @@ static long load_img() {
   return size;
 }
 static void init_ftrace() {
-  Log("ftrace: %s", elf_file);
+  Log("ftrace start");
   // parse_elf(elf_file);
 }
 
