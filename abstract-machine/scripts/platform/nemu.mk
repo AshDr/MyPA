@@ -14,10 +14,10 @@ LDFLAGS   += --gc-sections -e _start
 NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 
 # 开启批处理模式
-# NEMUFLAGS += -b
+NEMUFLAGS += -b
 
 # 解析elf
-# NEMUFLAGS += -f $(IMAGE).elf
+NEMUFLAGS += -f
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
