@@ -174,15 +174,13 @@ static int get_func_idx(paddr_t target) {
 }
 
 void trace_func_call(paddr_t pc, paddr_t target) {
-    // assert(call_depth >= 0);
-    Log("call call_depth: %d", call_depth);
+    assert(call_depth >= 0);
     int funcid = get_func_idx(target);
     ftrace_write(FMT_PADDR ": %*scall[%s@" FMT_PADDR "]\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name, target);
     ++call_depth;
 }
 
 void trace_func_ret(paddr_t pc) {
-    Log("ret call_depth: %d", call_depth);
     int funcid = get_func_idx(pc);
     ftrace_write(FMT_PADDR ": %*sret[%s]\n", pc, call_depth * 2, "", (funcid == -1) ? "???" : g_symbol_table[funcid].name);
     --call_depth;
