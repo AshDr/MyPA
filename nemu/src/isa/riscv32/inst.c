@@ -109,7 +109,6 @@ static int decode_exec(Decode *s) {
         // func call use x1(ra)
         trace_func_call(s->pc, s->dnpc);
       }
-      assert(rd != 0);
    }) 
   );
 
