@@ -54,7 +54,6 @@ enum {
 #define immS()                                                                 \
   do {                                                                         \
     *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7);                   \
-    Log(ANSI_FG_CYAN "%#x\n" ANSI_NONE, *imm);                                 \
   } while (0)
 
 #define immJ()                                                                 \
