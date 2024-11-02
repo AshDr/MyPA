@@ -146,7 +146,7 @@ void init_monitor(int argc, char *argv[]) {
   init_isa();
 
   /* init ftrace*/
-  init_ftrace();
+  IFDEF(CONFIG_TRACE, init_ftrace());
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
