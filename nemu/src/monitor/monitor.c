@@ -75,6 +75,7 @@ static long load_img() {
   return size;
 }
 static void init_ftrace() {
+  IFNDEF(CONFIG_TRACE, return );
   Log("ftrace start");
   parse_elf(elf_file);
 }
@@ -146,7 +147,7 @@ void init_monitor(int argc, char *argv[]) {
   init_isa();
 
   /* init ftrace*/
-  IFDEF(CONFIG_TRACE, init_ftrace());
+  init_ftrace();
 
   /* Load the image to memory. This will overwrite the built-in image. */
   long img_size = load_img();
