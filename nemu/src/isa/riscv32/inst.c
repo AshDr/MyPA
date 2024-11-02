@@ -62,9 +62,8 @@ enum {
                  (BITS(i, 20, 20) << 10) | (BITS(i, 19, 12) << 11))            \
                     << 1,                                                      \
                 21);                                                           \
-    Log(ANSI_FG_CYAN "%#x\n" ANSI_NONE, *imm);                                 \
   } while (0)
-
+// Log(ANSI_FG_CYAN "%#x\n" ANSI_NONE, *imm);
 #define immB()                                                                 \
   do {                                                                         \
     *imm = (SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 7, 7) << 11) |          \
