@@ -45,6 +45,11 @@ int printf(const char *fmt, ...) {
     if (*p == '%') {
       ++p;
       switch (*p) {
+      case 'c': {
+        putch(*p++);
+        ++length;
+        break;
+      }
       case 's': {
         char *s = va_arg(ap, char *);
         while (*s != '\0') {
@@ -93,6 +98,10 @@ int sprintf(char *out, const char *fmt, ...) {
     if (*p == '%') {
       ++p;
       switch (*p) {
+      case 'c': {
+        putch(*p);
+        break;
+      }
       case 's': {
         char *s = va_arg(ap, char *);
         strcpy(out, s);
