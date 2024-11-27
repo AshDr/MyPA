@@ -100,7 +100,8 @@ int sprintf(char *out, const char *fmt, ...) {
       ++p;
       switch (*p) {
       case 'c': {
-        putch(*p);
+        char ch = va_arg(ap, int);
+        putch(ch);
         break;
       }
       case 's': {
