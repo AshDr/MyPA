@@ -3,16 +3,17 @@
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
-void __am_gpu_init() {
-  int i;
-  uint32_t res_data = inl(VGACTL_ADDR);
-  int w = res_data >> 16;
-  int h = res_data & 0xffff; // TODO: get the correct height
-  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-  for (i = 0; i < w * h; i++)
-    fb[i] = i;
-  // init vmem data, single pixel is 4 bytes
-  outl(SYNC_ADDR, 1);
+void __am_gpu_init() { // test code
+
+  // int i;
+  // uint32_t res_data = inl(VGACTL_ADDR);
+  // int w = res_data >> 16;
+  // int h = res_data & 0xffff; // TODO: get the correct height
+  // uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  // for (i = 0; i < w * h; i++)
+  //   fb[i] = i;
+  // // init vmem data, single pixel is 4 bytes
+  // outl(SYNC_ADDR, 1);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
