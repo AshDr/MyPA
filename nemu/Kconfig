@@ -164,7 +164,12 @@ config DIFFTEST
     Enable differential testing with a reference design.
     Note that this will significantly reduce the performance of NEMU.
 config MTRACE
+  depends on TRACE
   bool "Enable mtracer"
+  default n
+config DTRACE
+  depends on TRACE
+  bool "Enable dtracer"
   default n
   
 choice
