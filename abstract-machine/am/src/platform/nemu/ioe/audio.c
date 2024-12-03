@@ -37,7 +37,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   uint32_t buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
   uint8_t *sbuf = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
   for (int i = 0; i < buf.end - buf.start; i++) {
-    sbuf[sbuf_pos] = ((char *)buf.start)[i];
+    sbuf[sbuf_pos] = ((uint8_t *)buf.start)[i];
     sbuf_pos = (sbuf_pos + 1) % buf_size;
   }
   outl(AUDIO_COUNT_ADDR, count + buf.end - buf.start);
