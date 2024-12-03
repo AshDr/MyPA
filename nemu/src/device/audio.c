@@ -46,14 +46,14 @@ void audio_callback(void *userdata, Uint8 *stream, int len) {
     uint32_t len1 = buf_size - sbuf_pos;
     SDL_MixAudio(stream, sbuf + sbuf_pos, len1, SDL_MIX_MAXVOLUME);
     uint32_t len2 = cpy_len - len1;
-    SDL_MixAudio(stream + len1, sbuf + len1, len2, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream + len1, sbuf, len2, SDL_MIX_MAXVOLUME);
   }
   sbuf_pos = (sbuf_pos + cpy_len) % buf_size;
   audio_base[reg_count] -= cpy_len;
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
-  if (audio_base[reg_init]) {
+  if (audio_base[reg_init] == 1) {
     SDL_AudioSpec s = {};
     s.format = AUDIO_S16SYS;
     s.userdata = NULL;
