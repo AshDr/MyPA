@@ -37,25 +37,23 @@ static uint32_t sbuf_pos = 0;
 //你还需要把SDL提供的缓冲区剩余的部分清零, 以避免把一些垃圾数据当做音频
 void audio_callback(void *userdata, Uint8 *stream, int len) {
   SDL_memset(stream, 0, len);
-  SDL_LockAudio();
   uint32_t remdata = audio_base[reg_count];
   uint32_t cpy_len = (len < remdata) ? len : remdata;
-  if (cpy_len + sbuf_pos < CONFIG_SB_SIZE) {
-    SDL_memcpy(stream, sbuf + sbuf_pos, cpy_len);
-    sbuf_pos += cpy_len;
+  uint32_t buf_size = audio_base[reg_sbuf_size];
+  if (cpy_len + sbuf_pos < buf_size) {
+    SDL_MixAudio(stream, sbuf + sbuf_pos, cpy_len, SDL_MIX_MAXVOLUME);
   } else {
-    uint32_t len1 = CONFIG_SB_SIZE - sbuf_pos;
-    SDL_memcpy(stream, sbuf + sbuf_pos, len1);
+    uint32_t len1 = buf_size - sbuf_pos;
+    SDL_MixAudio(stream, sbuf + sbuf_pos, len1, SDL_MIX_MAXVOLUME);
     uint32_t len2 = cpy_len - len1;
-    SDL_memcpy(stream + len1, sbuf, len2);
-    sbuf_pos = len2;
+    SDL_MixAudio(stream + len1, sbuf, len2, SDL_MIX_MAXVOLUME);
   }
+  sbuf_pos = (sbuf_pos + cpy_len) % buf_size;
   audio_base[reg_count] -= cpy_len;
-  SDL_UnlockAudio();
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
-  if (audio_base[reg_init] && is_write) {
+  if (audio_base[reg_init]) {
     SDL_AudioSpec s = {};
     s.format = AUDIO_S16SYS;
     s.userdata = NULL;
