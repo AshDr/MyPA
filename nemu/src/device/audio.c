@@ -46,7 +46,7 @@ void audio_callback(void *userdata, Uint8 *stream, int len) {
     uint32_t len1 = buf_size - sbuf_pos;
     SDL_MixAudio(stream, sbuf + sbuf_pos, len1, SDL_MIX_MAXVOLUME);
     uint32_t len2 = cpy_len - len1;
-    SDL_MixAudio(stream + len1, sbuf, len2, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream + len1, sbuf + len1, len2, SDL_MIX_MAXVOLUME);
   }
   sbuf_pos = (sbuf_pos + cpy_len) % buf_size;
   audio_base[reg_count] -= cpy_len;
