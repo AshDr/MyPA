@@ -35,21 +35,37 @@ static uint32_t sbuf_pos = 0;
 
 //如果回调函数需要的数据量大于当前流缓冲区中的数据量,
 //你还需要把SDL提供的缓冲区剩余的部分清零, 以避免把一些垃圾数据当做音频
-void audio_callback(void *userdata, Uint8 *stream, int len) {
+// void audio_callback(void *userdata, Uint8 *stream, int len) {
+//   SDL_memset(stream, 0, len);
+//   uint32_t remdata = audio_base[reg_count];
+//   uint32_t cpy_len = (len < remdata) ? len : remdata;
+//   uint32_t buf_size = audio_base[reg_sbuf_size];
+//   if (cpy_len + sbuf_pos < buf_size) {
+//     SDL_MixAudio(stream, sbuf + sbuf_pos, cpy_len, SDL_MIX_MAXVOLUME);
+//   } else {
+//     uint32_t len1 = buf_size - sbuf_pos;
+//     SDL_MixAudio(stream, sbuf + sbuf_pos, len1, SDL_MIX_MAXVOLUME);
+//     uint32_t len2 = cpy_len - len1;
+//     SDL_MixAudio(stream + len1, sbuf, len2, SDL_MIX_MAXVOLUME);
+//   }
+//   sbuf_pos = (sbuf_pos + cpy_len) % buf_size;
+//   audio_base[reg_count] -= cpy_len;
+// }
+void sdl_audio_callback(void *userdata, uint8_t *stream, int len) {
   SDL_memset(stream, 0, len);
-  uint32_t remdata = audio_base[reg_count];
-  uint32_t cpy_len = (len < remdata) ? len : remdata;
-  uint32_t buf_size = audio_base[reg_sbuf_size];
-  if (cpy_len + sbuf_pos < buf_size) {
-    SDL_MixAudio(stream, sbuf + sbuf_pos, cpy_len, SDL_MIX_MAXVOLUME);
-  } else {
-    uint32_t len1 = buf_size - sbuf_pos;
-    SDL_MixAudio(stream, sbuf + sbuf_pos, len1, SDL_MIX_MAXVOLUME);
-    uint32_t len2 = cpy_len - len1;
-    SDL_MixAudio(stream + len1, sbuf, len2, SDL_MIX_MAXVOLUME);
-  }
-  sbuf_pos = (sbuf_pos + cpy_len) % buf_size;
-  audio_base[reg_count] -= cpy_len;
+  uint32_t used_cnt = audio_base[reg_count];
+  len = len > used_cnt ? used_cnt : len;
+
+  uint32_t sbuf_size = audio_base[reg_sbuf_size];
+  if ((sbuf_pos + len) > sbuf_size) {
+    SDL_MixAudio(stream, sbuf + sbuf_pos, sbuf_size - sbuf_pos,
+                 SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream + (sbuf_size - sbuf_pos), sbuf + (sbuf_size - sbuf_pos),
+                 len - (sbuf_size - sbuf_pos), SDL_MIX_MAXVOLUME);
+  } else
+    SDL_MixAudio(stream, sbuf + sbuf_pos, len, SDL_MIX_MAXVOLUME);
+  sbuf_pos = (sbuf_pos + len) % sbuf_size;
+  audio_base[reg_count] -= len;
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
@@ -60,7 +76,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     s.freq = audio_base[reg_freq];
     s.channels = audio_base[reg_channels];
     s.samples = audio_base[reg_samples];
-    s.callback = audio_callback;
+    s.callback = sdl_audio_callback;
     audio_base[reg_count] = 0;
     audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
     int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
@@ -70,18 +86,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     }
     audio_base[reg_init] = 0;
   }
-}
-void init() {
-  SDL_AudioSpec s = {};
-  s.format = AUDIO_S16SYS; // 假设系统中音频数据的格式总是使用16位有符号数来表示
-  s.userdata = NULL; // 不使用
-  s.channels = 1;
-  s.samples = 1024;
-  s.freq = 8000;
-  s.callback = audio_callback;
-  SDL_InitSubSystem(SDL_INIT_AUDIO);
-  SDL_OpenAudio(&s, NULL);
-  SDL_PauseAudio(0);
 }
 
 void init_audio() {
@@ -97,5 +101,4 @@ void init_audio() {
 
   sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
   add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
-  IFDEF(CONFIG_HAS_AUDIO, init());
 }
