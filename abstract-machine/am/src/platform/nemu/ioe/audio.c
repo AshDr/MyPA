@@ -8,7 +8,7 @@
 #define AUDIO_INIT_ADDR (AUDIO_ADDR + 0x10)
 #define AUDIO_COUNT_ADDR (AUDIO_ADDR + 0x14)
 
-// static uint32_t sbuf_pos = 0;
+static uint32_t sbuf_pos = 0;
 
 void __am_audio_init() {}
 
@@ -32,14 +32,13 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   // 若当前流缓冲区的空闲空间少于即将写入的音频数据, 此次写入将会一直等待,
   // 直到有足够的空闲空间将音频数据完全写入流缓冲区才会返回
-  // Area buf = ctl->buf;
-  // uint32_t count = inl(AUDIO_COUNT_ADDR);
-  // uint32_t buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
-  // while (buf_size - count < buf.end - buf.start) {
-  //   count = inl(AUDIO_COUNT_ADDR);
-  // }
-  // for (uint8_t *p = buf.start; p < buf.end; p++) {
-  //   outb(AUDIO_ADDR, *p);
-  // }
-  // outl(AUDIO_COUNT_ADDR, count + buf.end - buf.start);
+  Area buf = ctl->buf;
+  uint32_t count = inl(AUDIO_COUNT_ADDR);
+  uint32_t buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
+  uint8_t *sbuf = (uint8_t *)(uintptr_t)AUDIO_SBUF_ADDR;
+  for (uint32_t i = 0; i < buf.end - buf.start; i++) {
+    sbuf[sbuf_pos] = ((char *)buf.start)[i];
+    sbuf_pos = (sbuf_pos + 1) % buf_size;
+  }
+  outl(AUDIO_COUNT_ADDR, count + buf.end - buf.start);
 }
