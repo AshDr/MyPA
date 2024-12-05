@@ -38,7 +38,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   //   SDL_AudioSpec s = {};
   //   s.format = AUDIO_S16SYS;
   //   s.userdata = NULL;
-  //   s.freq = audio_base[reg_freq];
+  //   s  .freq = audio_base[reg_freq];
   //   s.channels = audio_base[reg_channels];
   //   s.samples = audio_base[reg_samples];
   //   s.callback = sdl_audio_callback;
