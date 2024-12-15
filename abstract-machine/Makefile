@@ -17,6 +17,7 @@ endif
 ifeq ($(findstring $(MAKECMDGOALS),clean|clean-all|html),)
 
 ### Print build info message
+### ARCH is in command line, e.g., `make ARCH=x86_64-qemu`
 $(info # Building $(NAME)-$(MAKECMDGOALS) [$(ARCH)])
 
 ### Check: environment variable `$AM_HOME` looks sane
@@ -25,6 +26,7 @@ ifeq ($(wildcard $(AM_HOME)/am/include/am.h),)
 endif
 
 ### Check: environment variable `$ARCH` must be in the supported list
+### ARCHS will be a space-separated list of base names of all .mk files in the $(AM_HOME)/scripts directory. For example, if the directory contains x86.mk and arm.mk,
 ARCHS = $(basename $(notdir $(shell ls $(AM_HOME)/scripts/*.mk)))
 ifeq ($(filter $(ARCHS), $(ARCH)), )
   $(error Expected $$ARCH in {$(ARCHS)}, Got "$(ARCH)")
@@ -56,8 +58,8 @@ IMAGE     = $(abspath $(IMAGE_REL))
 ARCHIVE   = $(WORK_DIR)/build/$(NAME)-$(ARCH).a
 
 ### Collect the files to be linked: object files (`.o`) and libraries (`.a`)
-OBJS      = $(addprefix $(DST_DIR)/, $(addsuffix .o, $(basename $(SRCS))))
-LIBS     := $(sort $(LIBS) am klib) # lazy evaluation ("=") causes infinite recursions
+OBJS      = $(addprefix $(DST_DIR)/, $(addsuffix .o, $(basename $(SRCS))))  # klib/build/riscv32-nemu/src/xx.o
+LIBS     := $(sort $(LIBS) am klib) # lazy evaluation ("=") causes infinite recursions 去重
 LINKAGE   = $(OBJS) \
   $(addsuffix -$(ARCH).a, $(join \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
@@ -126,7 +128,8 @@ $(DST_DIR)/%.o: %.S
 
 ### Rule (recursive make): build a dependent library (am, klib, ...)
 $(LIBS): %:
-	@$(MAKE) -s -C $(AM_HOME)/$* archive
+	@$(MAKE) -s -C $(AM_HOME)/$* archive      
+### 等价于 make achieve 见下方
 
 ### Rule (link): objects (`*.o`) and libraries (`*.a`) -> `IMAGE.elf`, the final ELF binary to be packed into image (ld)
 $(IMAGE).elf: $(OBJS) $(LIBS)

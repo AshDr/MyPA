@@ -22,17 +22,49 @@
 
 // this should be enough
 static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char code_buf[65536 + 256] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"#include <stdint.h>\n"
 "int main() { "
 "  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
 
+static char *buf_start = NULL;
+static char *buf_end = buf + sizeof(buf);
+static int choose (int num) {
+  return rand() % num;
+}
+static void gen_ch(char ch) {
+  if(buf_start < buf_end) {
+    int n_writes = snprintf(buf_start, buf_end - buf_start, "%c", ch);
+    if(n_writes > 0) {
+      buf_start += n_writes;
+    }
+  }
+}
+static void gen_num() {
+  int num = choose(INT8_MAX);
+  if(buf_start < buf_end) {
+    int n_writes = snprintf(buf_start, buf_end - buf_start, "(uint32_t)%d", num);     
+    if(n_writes > 0) {
+      buf_start += n_writes;
+    }
+  } 
+}
+static char ops[] = {'+', '-', '*', '/'};
+static void gen_rand_op() {
+  int len = sizeof(ops);
+  gen_ch(ops[rand() % len]);
+}
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  switch(choose(3)) {
+    case 0: gen_num();break;
+    case 1: gen_ch('(');gen_rand_expr();gen_ch(')');break;
+    case 2: gen_rand_expr();gen_rand_op();gen_rand_expr();break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -44,6 +76,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    buf_start = buf;
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
@@ -53,7 +86,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc /tmp/.code.c -Werror -o /tmp/.expr"); // use -Werror flag to avoid divided by zero
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");

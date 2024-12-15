@@ -118,6 +118,10 @@ config CC_DEBUG
   bool "Enable debug information"
   default n
 
+config WATCHPOINT
+  bool "Enable watchpoint check"
+  default n
+
 config CC_ASAN
   depends on MODE_SYSTEM
   bool "Enable address sanitizer"
@@ -159,7 +163,15 @@ config DIFFTEST
   help
     Enable differential testing with a reference design.
     Note that this will significantly reduce the performance of NEMU.
-
+config MTRACE
+  depends on TRACE
+  bool "Enable mtracer"
+  default n
+config DTRACE
+  depends on TRACE
+  bool "Enable dtracer"
+  default n
+  
 choice
   prompt "Reference design"
   default DIFFTEST_REF_SPIKE if ISA_riscv
