@@ -25,6 +25,7 @@ INCLUDES = $(addprefix -I, $(INC_PATH))
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
+# get SRCS from other makefile and OBJS=build/obj-$(NAME)/xxx.o...
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
