@@ -20,7 +20,7 @@
 
 // macro stringizing
 #define str_temp(x) #x
-// #define str(x) str_temp(x)
+#define str(x) str_temp(x)
 
 // strlen() for string constant
 #define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1)
@@ -29,7 +29,7 @@
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 
 // macro concatenation
-#define concat_temp(x, y) x##y
+#define concat_temp(x, y) x ## y
 #define concat(x, y) concat_temp(x, y)
 #define concat3(x, y, z) concat(concat(x, y), z)
 #define concat4(x, y, z, w) concat3(concat(x, y), z, w)
@@ -103,9 +103,6 @@
 
 #if !defined(likely)
 #define likely(cond) __builtin_expect(cond, 1)
-#endif
-
-#if !defined(unlikely)
 #define unlikely(cond) __builtin_expect(cond, 0)
 #endif
 
