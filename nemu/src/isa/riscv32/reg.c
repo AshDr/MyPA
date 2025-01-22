@@ -25,7 +25,7 @@ const char *regs[] = {"$0",  "ra", "sp", "gp", "tp", "t0", "t1", "t2", "s0",
 static int reg_num = ARRLEN(regs);
 void isa_reg_display() {
   for (int i = 0; i < reg_num; i++) {
-    printf("%-8s%-#20x%-20u\n", regs[i], gpr(i), gpr(i));
+    printf("%-8s%-#20x%-20u!\n", regs[i], gpr(i), gpr(i));
   }
 }
 
