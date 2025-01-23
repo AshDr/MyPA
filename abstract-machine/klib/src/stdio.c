@@ -34,6 +34,57 @@ int int_to_str(int val, char *str) {
   return idx;
 }
 
+int unsiged_to_str(unsigned val, char *str) {
+  int idx = 0;
+  if (val == 0) {
+    str[idx++] = '0';
+    str[idx] = '\0';
+    return 1;
+  }
+  while (val > 0) {
+    str[idx++] = val % 10 + '0';
+    val /= 10;
+  }
+  str[idx] = '\0';
+  int l = 0, r = idx - 1;
+  while (l < r) {
+    char tmp = str[l];
+    str[l] = str[r];
+    str[r] = tmp;
+    l++;
+    r--;
+  }
+  return idx;
+}
+
+int unsigned_to_hex(unsigned val, char *str) {
+  int idx = 0;
+  if (val == 0) {
+    str[idx++] = '0';
+    str[idx] = '\0';
+    return 1;
+  }
+  while (val > 0) {
+    int digit = val % 16;
+    if (digit < 10) {
+      str[idx++] = digit + '0';
+    } else {
+      str[idx++] = digit - 10 + 'a';
+    }
+    val /= 16;
+  }
+  str[idx] = '\0';
+  int l = 0, r = idx - 1;
+  while (l < r) {
+    char tmp = str[l];
+    str[l] = str[r];
+    str[r] = tmp;
+    l++;
+    r--;
+  }
+  return idx;
+}
+
 int printf(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -72,7 +123,7 @@ int printf(const char *fmt, ...) {
       }
       case 'u':{
         unsigned val = va_arg(ap, unsigned);
-        int len = int_to_str(val, buf);
+        int len = unsiged_to_str(val, buf);
         if (len >= 50)
           panic("length of int > 50");
         for (int i = 0; i < len; ++i) {
@@ -83,15 +134,11 @@ int printf(const char *fmt, ...) {
       }
       case 'x':{
         unsigned val = va_arg(ap, unsigned);
-        int len = int_to_str(val, buf);
+        int len = unsigned_to_hex(val, buf);
         if (len >= 50)
           panic("length of int > 50");
         for (int i = 0; i < len; ++i) {
-          if(buf[i] >= '0' && buf[i] <= '9') {
-            putch(buf[i]);
-          } else {
-            putch(buf[i] - '0' + 'a');
-          }
+          putch(buf[i]);
         }
         length += len;
         break;
