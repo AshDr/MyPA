@@ -161,7 +161,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr, I,
           s->dnpc = (src1 + imm) & ~(word_t)1;
-          R(rd) = s->snpc; IFDEF(CONFIG_TRACE, {
+          R(rd) = s->snpc; IFDEF(CONFIG_FTRACE, {
             if (rd == 1) {
               // func call use x1(ra)
               trace_func_call(s->pc, s->dnpc);
@@ -177,7 +177,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J,
           s->dnpc = s->pc + imm;
-          R(rd) = s->snpc; IFDEF(CONFIG_TRACE, {
+          R(rd) = s->snpc; IFDEF(CONFIG_FTRACE, {
             if (rd == 1) {
               // func call use x1(ra)
               trace_func_call(s->pc, s->dnpc);
