@@ -70,6 +70,32 @@ int printf(const char *fmt, ...) {
         length += len;
         break;
       }
+      case 'u':{
+        unsigned val = va_arg(ap, unsigned);
+        int len = int_to_str(val, buf);
+        if (len >= 50)
+          panic("length of int > 50");
+        for (int i = 0; i < len; ++i) {
+          putch(buf[i]);
+        }
+        length += len;
+        break;
+      }
+      case 'x':{
+        unsigned val = va_arg(ap, unsigned);
+        int len = int_to_str(val, buf);
+        if (len >= 50)
+          panic("length of int > 50");
+        for (int i = 0; i < len; ++i) {
+          if(buf[i] >= '0' && buf[i] <= '9') {
+            putch(buf[i]);
+          } else {
+            putch(buf[i] - '0' + 'a');
+          }
+        }
+        length += len;
+        break;
+      }
       default:
         f = 0;
       }
