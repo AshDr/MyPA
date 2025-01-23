@@ -38,7 +38,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   CHECKDIFF_CSRS(mstatus);
   CHECKDIFF_CSRS(mtvec);
   CHECKDIFF_CSRS(mepc);
-  // CHECKDIFF_CSRS(mcause);
+  CHECKDIFF_CSRS(mcause);
   return true;
 }
 
