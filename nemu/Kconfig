@@ -171,6 +171,9 @@ config DTRACE
   depends on TRACE
   bool "Enable dtracer"
   default n
+config FTRACE
+  bool "Enable ftracer"
+  default n
   
 choice
   prompt "Reference design"
