@@ -110,6 +110,19 @@ int printf(const char *fmt, ...) {
         }
         break;
       }
+      case 'p':{
+        unsigned val = va_arg(ap, unsigned);
+        putch('0');
+        putch('x');
+        int len = unsigned_to_hex(val, buf);
+        if (len >= 50)
+          panic("length of int > 50");
+        for (int i = 0; i < len; ++i) {
+          putch(buf[i]);
+        }
+        length += len;
+        break;
+      }
       case 'd': {
         int val = va_arg(ap, int);
         int len = int_to_str(val, buf);
