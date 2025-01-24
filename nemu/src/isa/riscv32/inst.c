@@ -130,10 +130,19 @@ static vaddr_t *csr_register(word_t imm) {
   }
 }
 
+static void etrace() {
+  IFDEF(CONFIG_ETRACE, {
+    printf("\n" 
+      ANSI_FMT("[ETRACE]", ANSI_FG_YELLOW) 
+      "ecall in mepc = " FMT_WORD ", mcause = " FMT_WORD "\n",
+      cpu.csrs.mepc, cpu.csrs.mcause);
+  });
+}
+
 #define ECALL(dnpc)                                                            \
   {                                                                            \
     bool success;                                                              \
-    printf("ecall\n");                                                          \
+    etrace();                                                                  \
     dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));           \
   }
 #define CSR(i) *csr_register(i)
@@ -145,6 +154,7 @@ static vaddr_t *csr_register(word_t imm) {
   cpu.csrs.mstatus |= (1<<7); \
   cpu.csrs.mstatus &= ~((1<<11)+(1<<12)); \
 }
+
 
 static int decode_exec(Decode *s) {
   int rd = 0;

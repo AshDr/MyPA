@@ -28,6 +28,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   cpu.csrs.mepc = epc; 
   // set err number in mcause
   cpu.csrs.mcause = NO;
+  printf("NO= %d\n----------------", NO);
   // get the address of the interrupt/exception vector and set pc to it
   return cpu.csrs.mtvec;
 }
