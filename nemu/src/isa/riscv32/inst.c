@@ -267,7 +267,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL(s->dnpc));
   // mret
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, {
-      s->dnpc = cpu.csrs.mepc;
+    s->dnpc = CSR(0x341);
+    cpu.csrs.mstatus |= (1 << 7); // MPIE
+    R(0) = 0;
   });
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
