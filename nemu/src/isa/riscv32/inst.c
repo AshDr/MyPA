@@ -133,7 +133,7 @@ static vaddr_t *csr_register(word_t imm) {
 #define ECALL(dnpc)                                                            \
   {                                                                            \
     bool success;                                                              \
-    dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc+4));           \
+    dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));           \
   }
 #define CSR(i) *csr_register(i)
 
@@ -265,9 +265,14 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);
           CSR(imm) |= src1);
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL(s->dnpc));
-  //mret
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N,
-          s->dnpc = CSR(0x341); R(0) = 0);
+  // mret
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, {
+    if(cpu.csrs.mcause == 0xb) {
+      s->dnpc = cpu.csrs.mepc + 4;
+    } else {
+      s->dnpc = cpu.csrs.mepc;
+    }
+  });
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
 
