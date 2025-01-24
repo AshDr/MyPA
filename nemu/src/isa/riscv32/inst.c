@@ -137,6 +137,8 @@ static vaddr_t *csr_register(word_t imm) {
   }
 #define CSR(i) *csr_register(i)
 
+#define SETBIT(x, n) (x |= 1 << n)
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -268,7 +270,7 @@ static int decode_exec(Decode *s) {
   // mret
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, {
     s->dnpc = CSR(0x341);
-    cpu.csrs.mstatus = 0x80; // MPIE
+    // SETBIT(cpu.csrs.mstatus, 3);
     R(0) = 0;
   });
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
