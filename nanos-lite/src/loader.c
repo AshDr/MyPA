@@ -28,14 +28,14 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr ehdr;
-  ramdisk_read(&ehdr, 0, sizeof(ehdr));
+  ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
   printf("ident: %x\n", ehdr.e_ident);
   assert(((uint32_t) ehdr.e_ident == 0x464c457f));
   assert(EXPECT_TYPE == ehdr.e_machine);
   uint32_t phnum = ehdr.e_phnum;
   Elf_Phdr phdr;
   for(int i = 0; i < phnum; i++) {
-    ramdisk_read(&phdr, ehdr.e_phoff + i * ehdr.e_phentsize, sizeof(phdr));
+    ramdisk_read(&phdr, ehdr.e_phoff + i * ehdr.e_phentsize, sizeof(Elf_Phdr));
     if(phdr.p_type == PT_LOAD) {
       ramdisk_read((void *)phdr.p_vaddr, phdr.p_offset, phdr.p_filesz);
       if(phdr.p_filesz < phdr.p_memsz) {
