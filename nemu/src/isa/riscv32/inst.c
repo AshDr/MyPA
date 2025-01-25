@@ -148,7 +148,7 @@ static void etrace() {
 #define CSR(i) *csr_register(i)
 
 #define MRET() { \
-  s->dnpc = CSR(0x341) + 4; \
+  s->dnpc = CSR(0x341); \
   cpu.csrs.mstatus &= ~(1<<3); \
   cpu.csrs.mstatus |= ((cpu.csrs.mstatus&(1<<7))>>4); \
   cpu.csrs.mstatus |= (1<<7); \
