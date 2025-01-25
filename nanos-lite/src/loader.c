@@ -9,9 +9,40 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
+#if defined(__ISA_AM_NATIVE__)
+# define EXPECT_TYPE EM_X86_64
+#elif defined(__ISA_X86__)
+# define EXPECT_TYPE EM_X86_64
+#elif defined(__ISA_MIPS32__)
+# define EXPECT_TYPE EM_MIPS
+#elif defined(__riscv)
+# define EXPECT_TYPE EM_RISCV
+#elif defined(__ISA_LOONGARCH32R__)
+# define EXPECT_TYPE EM_LOONGARCH
+#else
+# error Unsupported ISA __ISA__
+#endif
+
+extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
+
+
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  TODO();
-  return 0;
+  Elf_Ehdr ehdr;
+  ramdisk_read(&ehdr, 0, sizeof(ehdr));
+  assert((*(uint32_t *)ehdr.e_ident == 0x7F454C46));
+  assert(EXPECT_TYPE == ehdr.e_machine);
+  uint32_t phnum = ehdr.e_phnum;
+  Elf_Phdr phdr;
+  for(int i = 0; i < phnum; i++) {
+    ramdisk_read(&phdr, ehdr.e_phoff + i * ehdr.e_phentsize, sizeof(phdr));
+    if(phdr.p_type == PT_LOAD) {
+      ramdisk_read((void *)phdr.p_vaddr, phdr.p_offset, phdr.p_filesz);
+      if(phdr.p_filesz < phdr.p_memsz) {
+        memset((void *)(phdr.p_vaddr + phdr.p_filesz), 0, phdr.p_memsz - phdr.p_filesz);
+      }
+    }
+  }
+  return ehdr.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
