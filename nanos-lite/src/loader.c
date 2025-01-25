@@ -27,10 +27,6 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  Elf_Ehdr ehdr1;
-  ramdisk_read((void*)&ehdr1, 0, sizeof(Elf_Ehdr));
-  printf("ident1: %u\n", ehdr1.e_ident);
-
   uint32_t phdr_size = sizeof(Elf_Phdr);
   Elf_Ehdr *ehdr = malloc(sizeof(Elf_Ehdr));
   Elf_Phdr *phdr = malloc(phdr_size);
