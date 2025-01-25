@@ -32,7 +32,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Phdr *phdr = malloc(phdr_size);
   
   ramdisk_read((void*)ehdr, 0, sizeof(Elf_Ehdr));
-  printf("ident2: %u\n", ehdr->e_ident);
+  // printf("ident2: %u\n", ehdr->e_ident);
   assert(*(uint32_t *)ehdr->e_ident == 0x464c457f);
   assert(EXPECT_TYPE == ehdr->e_machine);
   uint32_t phdr_num = ehdr->e_phnum;
