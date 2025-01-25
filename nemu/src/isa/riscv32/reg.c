@@ -31,12 +31,13 @@ void isa_reg_display() {
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   const char *reals = s + 1;
+  printf("search reg: %s\n", s);
   for (int i = 0; i < reg_num; i++) {
     if (strcmp(reals, regs[i]) == 0) {
       return gpr(i);
     }
+    printf("current reg: %s\n", regs[i]);
   }
-  printf("Reg error!\n");
   *success = false;
   return 0;
 }
