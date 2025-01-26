@@ -34,9 +34,8 @@ extern int fs_lseek(int fd, size_t offset, int whence);
 static uintptr_t loader(PCB *pcb, const char *filename) {
   // Log("Loading program %s", filename);
   Log("Loading program");
-  int fd = fs_open(filename, 0, 0);
   Log("shit-----");
-
+  int fd = fs_open(filename, 0, 0);
   if(fd == -1) {
     panic("Failed to open file %s", filename);
   }
