@@ -41,6 +41,7 @@ static Finfo file_table[] __attribute__((used)) = {
 void init_fs() {
   // TODO: initialize the size of /dev/fb
   file_table[FD_FB].size = io_read(AM_GPU_CONFIG).vmemsz;
+  printf("fb size: %d\n", file_table[FD_FB].size);
 }
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
