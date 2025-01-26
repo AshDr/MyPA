@@ -7,18 +7,17 @@ void do_syscall(Context *c) {
   a[1] = c->GPR2; // a0
   a[2] = c->GPR3; // a1
   a[3] = c->GPR4; // a2
-  printf("syscall---------------\n");
   switch (a[0]) {
     case SYS_exit: {
       #ifdef CONFIG_STRACE
-      Log("Syscall: SYS_exit");
+      printf("Syscall: SYS_exit\n");
       #endif
       halt(0); // need change ?
       break;
     }
     case SYS_yield: {
       #ifdef CONFIG_STRACE
-      Log("Syscall: SYS_yield");
+      printf("Syscall: SYS_yield\n");
       #endif
       yield();
       c->GPRx = 0; 
@@ -26,7 +25,7 @@ void do_syscall(Context *c) {
     }
     case SYS_write: {
       #ifdef CONFIG_STRACE
-      Log("Syscall: SYS_write");
+      printf("Syscall: SYS_write\n");
       #endif
       // int fd = a[1];
       const void *buf = (const void *)a[2];

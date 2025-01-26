@@ -172,12 +172,15 @@ config DTRACE
   bool "Enable dtracer"
   default n
 config FTRACE
+  depends on TRACE
   bool "Enable ftracer"
   default n
 config ETRACE
+  depends on TRACE
   bool "Enable etracer"
   default n
 config STRACE
+  depends on TRACE
   bool "Enable stracer"
   default n
 choice
