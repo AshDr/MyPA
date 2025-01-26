@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <sys/time.h>
 #define CONFIG_STRACE
 
 extern int fs_open(const char *pathname, int flags, int mode);
@@ -91,6 +92,17 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_brk\n");
       #endif
+      c->GPRx = 0;
+      break;
+    }
+    case SYS_gettimeofday: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_gettimeofday\n");
+      #endif
+      uint64_t us = io_read(AM_TIMER_UPTIME).us;
+      struct timeval *tv = (struct timeval *)c->GPR2;
+      tv->tv_sec = us / 1000000;
+      tv->tv_usec = us % 1000000;
       c->GPRx = 0;
       break;
     }
