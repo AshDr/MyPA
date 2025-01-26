@@ -24,7 +24,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
                            .has_accel = false,
                            .width = width,
                            .height = height,
-                           .vmemsz = 0};
+                           .vmemsz = width*height*4};
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
