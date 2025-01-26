@@ -38,16 +38,7 @@ void do_syscall(Context *c) {
       int fd = (int)c->GPR2;
       void *buf = (void *)c->GPR3;
       size_t count = (size_t)c->GPR4;
-      if(fd == 1 || fd == 2) {
-        for(int i = 0; i < count; i++) {
-          putch(((char *)buf)[i]);
-        }
-        c->GPRx = count;
-      } else if(fd > 2){
-        c->GPRx = fs_write(fd, buf, count);
-      }else {
-        c->GPRx = -1;
-      }
+      c->GPRx = fs_write(fd, buf, count);
       break;
     }
     case SYS_open: {
