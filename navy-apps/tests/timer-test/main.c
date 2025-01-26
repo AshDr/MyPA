@@ -7,7 +7,7 @@ int main() {
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
-    NDL_Init();
+    NDL_Init(0);
     uint32_t start = NDL_GetTicks();
     NDL_Quit();
     return 0;
