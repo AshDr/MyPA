@@ -70,18 +70,21 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 size_t fs_lseek(int fd, size_t offset, int whence) {
   switch(whence) {
     case SEEK_SET: {
-      assert(offset >= file_table[fd].disk_offset && offset <= file_table[fd].disk_offset + file_table[fd].size);
       file_table[fd].open_offset = offset; break;
     }
     case SEEK_CUR: {
-      assert(file_table[fd].open_offset + offset >= file_table[fd].disk_offset && file_table[fd].open_offset + offset <= file_table[fd].disk_offset + file_table[fd].size);
       file_table[fd].open_offset += offset; break;
     }
     case SEEK_END: {
-      assert(file_table[fd].size + offset >= file_table[fd].disk_offset && file_table[fd].size + offset <= file_table[fd].disk_offset + file_table[fd].size);
       file_table[fd].open_offset = file_table[fd].size + offset; break;
     }
     default: panic("invalid whence %d", whence);
+  }
+  if(file_table[fd].open_offset > file_table[fd].size) {
+    file_table[fd].open_offset = file_table[fd].size;
+  }
+  if(file_table[fd].open_offset < 0) {
+    file_table[fd].open_offset = 0;
   }
   return file_table[fd].open_offset;
 }
