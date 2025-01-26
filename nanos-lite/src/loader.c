@@ -35,10 +35,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // Log("Loading program %s", filename);
   Log("Loading program");
   int fd = fs_open(filename, 0, 0);
+  Log("shit-----");
+
   if(fd == -1) {
     panic("Failed to open file %s", filename);
   }
-  Log("shit-----");
   uint32_t phdr_size = sizeof(Elf_Phdr);
   Elf_Ehdr *ehdr = malloc(sizeof(Elf_Ehdr));
   Elf_Phdr *phdr = malloc(phdr_size);
