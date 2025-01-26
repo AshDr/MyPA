@@ -2,6 +2,11 @@
 #include "syscall.h"
 #define CONFIG_STRACE
 
+extern int fs_open(const char *pathname, int flags, int mode);
+extern size_t fs_read(int fd, void *buf, size_t len);
+extern size_t fs_write(int fd, const void *buf, size_t len);
+extern size_t fs_lseek(int fd, size_t offset, int whence);
+extern int fs_close(int fd);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -37,10 +42,39 @@ void do_syscall(Context *c) {
           putch(((char *)buf)[i]);
         }
         c->GPRx = count;
-      } else {
+      } else if(fd > 2){
+        c->GPRx = fs_write(fd, buf, count);
+      }else {
         c->GPRx = -1;
       }
-      printf("count: %u\n", count);
+      break;
+    }
+    case SYS_open: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_open\n");
+      #endif
+      const char *path = (const char *)c->GPR2;
+      int flags = (int)c->GPR3;
+      int mode = (int)c->GPR4;
+      c->GPRx = fs_open(path, flags, mode);
+      break;
+    }
+    case SYS_read: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_read\n");
+      #endif
+      int fd = (int)c->GPR2;
+      void *buf = (void *)c->GPR3;
+      size_t count = (size_t)c->GPR4;
+      c->GPRx = fs_read(fd, buf, count);
+      break;
+    }
+    case SYS_close: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_close\n");
+      #endif
+      int fd = (int)c->GPR2;
+      c->GPRx = fs_close(fd);
       break;
     }
     case SYS_brk: {
