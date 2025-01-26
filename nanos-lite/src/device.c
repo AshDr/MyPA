@@ -28,14 +28,17 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   }
   return snprintf((char *)buf, len, "%s %s\n", ev.keydown? "kd" : "ku", keyname[ev.keycode]);
 }
-
+static uint32_t scree_w = 0, screen_h = 0;
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
+  scree_w = cfg.width;
+  screen_h = cfg.height;
   return snprintf((char *)buf, len, "WIDTH: %d\nHEIGHT: %d\n", cfg.width, cfg.height);
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  return 0;
+  io_write(AM_GPU_FBDRAW,(offset % (scree_w * 4)) / 4, offset / (scree_w * 4), (uint32_t *)buf, len / 4, 1, true);
+  return 1;
 }
 
 void init_device() {
