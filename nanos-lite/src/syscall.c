@@ -2,6 +2,7 @@
 #include "syscall.h"
 #define CONFIG_STRACE
 
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1; // a7
@@ -40,6 +41,13 @@ void do_syscall(Context *c) {
         c->GPRx = -1;
       }
       printf("count: %u\n", count);
+      break;
+    }
+    case SYS_brk: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_brk\n");
+      #endif
+      c->GPRx = 0;
       break;
     }
     default: panic("Unhandled syscall ID = %d", a[0]);
