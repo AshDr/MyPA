@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#define CONFIG_STRACE
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -12,7 +13,6 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_exit\n");
       #endif
-      printf("Syscall: SYS_exit\n");
       halt(0); // need change ?
       break;
     }
@@ -20,7 +20,6 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_yield\n");
       #endif
-      printf("Syscall: SYS_yield\n");
       yield();
       c->GPRx = 0; 
       break;
@@ -29,13 +28,13 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_write\n");
       #endif
-      printf("Syscall: SYS_write\n");
       // int fd = a[1];
       const void *buf = (const void *)a[2];
       size_t count = a[3];
       for(int i = 0; i < count; i++) {
         putch(((char *)buf)[i]);
       }
+      printf("count: %u\n", count);
       c->GPRx = count;
       break;
     }
