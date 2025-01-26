@@ -69,6 +69,16 @@ void do_syscall(Context *c) {
       c->GPRx = fs_read(fd, buf, count);
       break;
     }
+    case SYS_lseek: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_lseek\n");
+      #endif
+      int fd = (int)c->GPR2;
+      size_t offset = (size_t)c->GPR3;
+      int whence = (int)c->GPR4;
+      c->GPRx = fs_lseek(fd, offset, whence);
+      break;
+    }
     case SYS_close: {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_close\n");
