@@ -40,6 +40,8 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
 int fs_open(const char *pathname, int flags, int mode) {
+  Log("In fs_open");
+  Log("open %s", pathname);
   for (int i = 0; i < sizeof(file_table) / sizeof(Finfo); i++) {
     if (strcmp(pathname, file_table[i].name) == 0) {
       file_table[i].open_offset = 0;
