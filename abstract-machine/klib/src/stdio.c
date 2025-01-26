@@ -243,9 +243,69 @@ int sprintf(char *out, const char *fmt, ...) {
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  int res = sprintf(out, fmt, ap);
+  const char *p = fmt;
+  char *start = out;
+  char buf[50];
+  while (*p != '\0') {
+    if (*p == '%') {
+      ++p;
+      switch (*p) {
+      case 'c': {
+          char ch = va_arg(ap, int);
+          *out++ = ch;
+          break;
+        }
+      case 's': {
+          char *s = va_arg(ap, char *);
+          while (*s != '\0') {
+            *out++ = *s++;
+          }
+          break;
+        }
+      case 'p':{
+          unsigned val = va_arg(ap, unsigned);
+          *out++ = '0';
+          *out++ = 'x';
+          int len = unsigned_to_hex(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
+      case 'd': {
+          int val = va_arg(ap, int);
+          int len = int_to_str(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
+      case 'u':{
+          unsigned val = va_arg(ap, unsigned);
+          int len = unsiged_to_str(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
+      }
+    } else {
+      *out++ = *p;
+    }
+    ++p;
+  }
+  if(out - start >= n) {
+    out -= (out - start - n);
+  }
+  *out = '\0';
   va_end(ap);
-  return res;
+  return out - start;
 }
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
