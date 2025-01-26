@@ -311,4 +311,61 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
 
+int sscanf(const char *in, const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  const char *p = fmt;
+  const char *start = in;
+  while (*p != '\0') {
+    if (*p == '%') {
+      ++p;
+      switch (*p) {
+      case 'c': {
+          char *ch = va_arg(ap, char *);
+          *ch = *in++;
+          break;
+        }
+      case 's': {
+          char *s = va_arg(ap, char *);
+          while (*in != ' ' && *in != '\0') {
+            *s++ = *in++;
+          }
+          *s = '\0';
+          break;
+        }
+      case 'd': {
+          int *val = va_arg(ap, int *);
+          int is_neg = 0;
+          if (*in == '-') {
+            is_neg = 1;
+            ++in;
+          }
+          *val = 0;
+          while (*in != ' ' && *in != '\0') {
+            *val = *val * 10 + *in - '0';
+            ++in;
+          }
+          if (is_neg) {
+            *val = -*val;
+          }
+          break;
+        }
+      case 'u': {
+          unsigned *val = va_arg(ap, unsigned *);
+          *val = 0;
+          while (*in != ' ' && *in != '\0') {
+            *val = *val * 10 + *in - '0';
+            ++in;
+          }
+          break;
+        }
+      }
+    } else {
+      ++in;
+    }
+    ++p;
+  }
+  va_end(ap);
+  return in - start;
+}
 #endif
