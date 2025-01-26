@@ -186,25 +186,49 @@ int sprintf(char *out, const char *fmt, ...) {
       ++p;
       switch (*p) {
       case 'c': {
-        char ch = va_arg(ap, int);
-        putch(ch);
-        break;
-      }
+          char ch = va_arg(ap, int);
+          *out++ = ch;
+          break;
+        }
       case 's': {
-        char *s = va_arg(ap, char *);
-        strcpy(out, s);
-        out += strlen(out);
-        break;
-      }
+          char *s = va_arg(ap, char *);
+          while (*s != '\0') {
+            *out++ = *s++;
+          }
+          break;
+        }
+      case 'p':{
+          unsigned val = va_arg(ap, unsigned);
+          *out++ = '0';
+          *out++ = 'x';
+          int len = unsigned_to_hex(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
       case 'd': {
-        int val = va_arg(ap, int);
-        int len = int_to_str(val, buf);
-        if (len >= 50)
-          panic("length of int > 50");
-        strcpy(out, buf);
-        out += len;
-        break;
-      }
+          int val = va_arg(ap, int);
+          int len = int_to_str(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
+      case 'u':{
+          unsigned val = va_arg(ap, unsigned);
+          int len = unsiged_to_str(val, buf);
+          if (len >= 50)
+            panic("length of int > 50");
+          for (int i = 0; i < len; ++i) {
+            *out++ = buf[i];
+          }
+          break;
+        }
       }
     } else {
       *out++ = *p;
@@ -217,9 +241,12 @@ int sprintf(char *out, const char *fmt, ...) {
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  panic("Not implemented");
+  va_list ap;
+  va_start(ap, fmt);
+  int res = sprintf(out, fmt, ap);
+  va_end(ap);
+  return res;
 }
-
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
