@@ -1,7 +1,7 @@
 #include <common.h>
 #include "syscall.h"
 #include <sys/time.h>
-#define CONFIG_STRACE
+// #define CONFIG_STRACE
 
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(int fd, void *buf, size_t len);
