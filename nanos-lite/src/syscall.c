@@ -30,7 +30,7 @@ void do_syscall(Context *c) {
       // int fd = a[1];
       const void *buf = (const void *)a[2];
       size_t count = a[3];
-      for(size_t i = 0; i < count; i++) {
+      for(int i = 0; i < count; i++) {
         putch(((char *)buf)[i]);
       }
       c->GPRx = count;
