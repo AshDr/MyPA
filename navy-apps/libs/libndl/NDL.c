@@ -30,6 +30,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     *w = screen_w;
     *h = screen_h;
   }
+  printf("OpenCanvas: %d %d\n", *w, *h);
   canvas_w = *w;
   canvas_h = *h;
   if (getenv("NWM_APP")) {
@@ -83,7 +84,6 @@ int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
-  // printf("screen_w = %d, screen_h = %d\n", screen_w, screen_h);
   return 0;
 }
 
