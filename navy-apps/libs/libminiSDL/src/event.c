@@ -26,6 +26,7 @@ int SDL_WaitEvent(SDL_Event *event) {
     for (int i = 0; i < 83; i++) {
       if (strcmp(keyname[i], buf + 3) == 0) {
         event->key.keysym.sym = i;
+        printf("return %d\n", i);
         return 1;
       }
     }
