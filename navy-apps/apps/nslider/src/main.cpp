@@ -51,13 +51,12 @@ int main() {
   int rep = 0, g = 0;
 
   render();
-
+  printf("in\n");
   while (1) {
     SDL_Event e;
     SDL_WaitEvent(&e);
 
     if (e.type == SDL_KEYDOWN) {
-      printf("keydown\n");
       switch(e.key.keysym.sym) {
         case SDLK_0: rep = rep * 10 + 0; break;
         case SDLK_1: rep = rep * 10 + 1; break;
