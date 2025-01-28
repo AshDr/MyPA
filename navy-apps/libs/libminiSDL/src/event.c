@@ -17,7 +17,18 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  return 1;
+  char buf[20];
+  while (1) {
+    if (NDL_PollEvent(buf, sizeof(buf)) == 0) continue;
+    event->type = buf[1] == 'u' ? SDL_KEYUP : SDL_KEYDOWN;
+    for (int i = 0; i < 83; i++) {
+      if (strcmp(keyname[i], buf + 3) == 0) {
+        event->key.keysym.sym = i;
+        return 1;
+      }
+    }
+  }
+  return 0;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
