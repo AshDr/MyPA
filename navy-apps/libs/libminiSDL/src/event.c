@@ -21,10 +21,10 @@ int SDL_WaitEvent(SDL_Event *event) {
   while (1) {
     if (NDL_PollEvent(buf, sizeof(buf)) == 0) continue;
     event->type = buf[1] == 'u' ? SDL_KEYUP : SDL_KEYDOWN;
+    printf("keyboard\n");
     for (int i = 0; i < 83; i++) {
       if (strcmp(keyname[i], buf + 3) == 0) {
         event->key.keysym.sym = i;
-        printf("keyboard\n");
         return 1;
       }
     }
