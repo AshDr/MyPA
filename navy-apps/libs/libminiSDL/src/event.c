@@ -21,12 +21,12 @@ int SDL_WaitEvent(SDL_Event *event) {
   char buf[20];
   while (1) {
     if (NDL_PollEvent(buf, sizeof(buf)) == 0) continue;
-    printf("%s?\n",buf);
     event->type = buf[1] == 'u' ? SDL_KEYUP : SDL_KEYDOWN;
+    printf("buf:%s",buf);
+    printf("len=%d\n",strlen(buf));
     for (int i = 0; i < 83; i++) {
       if (strcmp(keyname[i], buf + 3) == 0) {
         event->key.keysym.sym = i;
-        printf("return %d\n", i);
         return 1;
       }
     }
