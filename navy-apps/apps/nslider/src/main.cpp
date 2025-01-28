@@ -45,13 +45,17 @@ void next(int rep) {
 }
 
 int main() {
+  printf("in1--------------------\n");
+
   SDL_Init(0);
   SDL_Surface *screen = SDL_SetVideoMode(W, H, 32, SDL_HWSURFACE);
+  printf("in2--------------------\n");
 
   int rep = 0, g = 0;
 
   render();
-  printf("in\n");
+  printf("in3--------------------\n");
+
   while (1) {
     SDL_Event e;
     SDL_WaitEvent(&e);
