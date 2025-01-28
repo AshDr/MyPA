@@ -30,8 +30,8 @@ int SDL_WaitEvent(SDL_Event *event) {
         return 1;
       }
     }
+    printf("return nothing\n");
   }
-  printf("return nothing\n");
   return 0;
 }
 
