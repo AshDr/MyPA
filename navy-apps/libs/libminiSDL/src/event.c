@@ -4,6 +4,8 @@
 
 #define keyname(k) #k,
 
+static uint8_t key_state[83] = {0};
+
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
@@ -22,6 +24,11 @@ int SDL_PollEvent(SDL_Event *ev) {
   for (int i = 0; i < 83; i++) {
     if (strcmp(keyname[i], buf + 3) == 0) {
       ev->key.keysym.sym = i;
+      if (ev->type == SDL_KEYDOWN) {
+        key_state[i] = 1;
+      } else {
+        key_state[i] = 0;
+      }
       return 1;
     }
   }
@@ -40,6 +47,11 @@ int SDL_WaitEvent(SDL_Event *event) {
     for (int i = 0; i < 83; i++) {
       if (strcmp(keyname[i], buf + 3) == 0) {
         event->key.keysym.sym = i;
+        if (event->type == SDL_KEYDOWN) {
+          key_state[i] = 1;
+        } else {
+          key_state[i] = 0;
+        }
         return 1;
       }
     }
@@ -50,7 +62,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
   return 0;
 }
-
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  return NULL;
+  if (numkeys) *numkeys = 83;
+  return key_state;
 }
