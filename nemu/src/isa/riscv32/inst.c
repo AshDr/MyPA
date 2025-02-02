@@ -115,6 +115,47 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2,
   // }
 }
 
+static vaddr_t *csr_register(word_t imm) {
+  switch (imm) {
+  case 0x341:
+    return &(cpu.csrs.mepc);
+  case 0x342:
+    return &(cpu.csrs.mcause);
+  case 0x300:
+    return &(cpu.csrs.mstatus);
+  case 0x305:
+    return &(cpu.csrs.mtvec);
+  default:
+    panic("Unknown csr");
+  }
+}
+
+static void etrace() {
+  IFDEF(CONFIG_ETRACE, {
+    printf("\n" 
+      ANSI_FMT("[ETRACE]", ANSI_FG_YELLOW) 
+      "ecall in mepc = " FMT_WORD ", mcause = " FMT_WORD "\n",
+      cpu.csrs.mepc, cpu.csrs.mcause);
+  });
+}
+
+#define ECALL(dnpc)                                                            \
+  {                                                                            \
+    bool success;                                                              \
+    etrace();                                                                  \
+    dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));           \
+  }
+#define CSR(i) *csr_register(i)
+
+#define MRET() { \
+  s->dnpc = CSR(0x341) + 4; \
+  cpu.csrs.mstatus &= ~(1<<3); \
+  cpu.csrs.mstatus |= ((cpu.csrs.mstatus&(1<<7))>>4); \
+  cpu.csrs.mstatus |= (1<<7); \
+  cpu.csrs.mstatus &= ~((1<<11)+(1<<12)); \
+}
+
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -139,7 +180,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr, I,
           s->dnpc = (src1 + imm) & ~(word_t)1;
-          R(rd) = s->snpc; IFDEF(CONFIG_TRACE, {
+          R(rd) = s->snpc; IFDEF(CONFIG_FTRACE, {
             if (rd == 1) {
               // func call use x1(ra)
               trace_func_call(s->pc, s->dnpc);
@@ -155,7 +196,7 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J,
           s->dnpc = s->pc + imm;
-          R(rd) = s->snpc; IFDEF(CONFIG_TRACE, {
+          R(rd) = s->snpc; IFDEF(CONFIG_FTRACE, {
             if (rd == 1) {
               // func call use x1(ra)
               trace_func_call(s->pc, s->dnpc);
@@ -238,9 +279,14 @@ static int decode_exec(Decode *s) {
           R(rd) = src1 / src2);
   INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra, R,
           R(rd) = (sword_t)src1 >> BITS(src2, 4, 0));
-
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I, R(rd) = CSR(imm);
+          CSR(imm) = src1);
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);
+          CSR(imm) |= src1);
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL(s->dnpc));
+  // mret
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, MRET());
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
-
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0

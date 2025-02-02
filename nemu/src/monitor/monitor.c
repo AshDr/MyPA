@@ -75,7 +75,7 @@ static long load_img() {
   return size;
 }
 static void init_ftrace() {
-  IFNDEF(CONFIG_TRACE, return );
+  IFNDEF(CONFIG_FTRACE, return);
   Log("ftrace start");
   parse_elf(elf_file);
 }
