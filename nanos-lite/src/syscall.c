@@ -1,6 +1,7 @@
 #include <common.h>
 #include "syscall.h"
 #include <sys/time.h>
+#include <proc.h>
 // #define CONFIG_STRACE
 
 extern int fs_open(const char *pathname, int flags, int mode);
@@ -8,6 +9,7 @@ extern size_t fs_read(int fd, void *buf, size_t len);
 extern size_t fs_write(int fd, const void *buf, size_t len);
 extern size_t fs_lseek(int fd, size_t offset, int whence);
 extern int fs_close(int fd);
+extern void naive_uload(PCB *pcb, const char *filename);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -22,6 +24,13 @@ void do_syscall(Context *c) {
       #endif
       int status = (int)c->GPR2;
       halt(status); // need change ?
+      break;
+    }
+    case SYS_execve: {
+      #ifdef CONFIG_STRACE
+      printf("Syscall: SYS_execve\n");
+      #endif
+      naive_uload(NULL, (const char *)c->GPR2);
       break;
     }
     case SYS_yield: {
