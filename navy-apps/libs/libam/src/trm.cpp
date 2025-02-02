@@ -5,9 +5,9 @@
 Area heap;
 
 void putch(char ch) {
-  putchar(ch);
+  putch(ch);
 }
 
 void halt(int code) {
-  _exit(code);
+  halt(code);
 }
