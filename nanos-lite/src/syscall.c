@@ -22,8 +22,9 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_exit\n");
       #endif
-      int status = (int)c->GPR2;
-      halt(status); // need change ?
+      // int status = (int)c->GPR2;
+      // halt(status); // need change ?
+      naive_uload(NULL, "/bin/menu");
       break;
     }
     case SYS_execve: {
