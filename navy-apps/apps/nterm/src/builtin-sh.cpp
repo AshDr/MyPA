@@ -23,6 +23,7 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+  if(cmd == '\n') return;
   int len = strlen(cmd);
   char *str = (char *)malloc(len);
   memcpy(str, cmd, sizeof(char) * len);
