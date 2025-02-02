@@ -29,6 +29,7 @@ static void sh_handle_cmd(const char *cmd) {
   str[len - 1] = 0;
   // execve(str, NULL, NULL);
   printf("terminal execvep: %s\n", str);
+  for(int i = 0; i < 10000000; i++);
   execvp(str, NULL);
 }
 
