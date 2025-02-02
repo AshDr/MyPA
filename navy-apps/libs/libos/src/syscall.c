@@ -120,6 +120,7 @@ int execvp(const char *file, char *const argv[]) {
       strncpy(filename, p, q - p);
       filename[q - p] = '/';
       strcpy(filename + (q - p + 1), file);
+      printf("execvp: trying %s\n", filename);
       int ret = _execve(filename, argv, NULL);
       free(filename);
       if(ret == 0) {
