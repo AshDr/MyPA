@@ -28,8 +28,8 @@ static void sh_handle_cmd(const char *cmd) {
   memcpy(str, cmd, sizeof(char) * len);
   str[len - 1] = 0;
   // execve(str, NULL, NULL);
-  printf("terminal execvep: %s\n", str);
-  for(int i = 0; i < 10000000; i++);
+  sh_printf("terminal execvep: %s\n", str);
+  for(volatile int i = 0; i < 10000000; i++);
   execvp(str, NULL);
 }
 
