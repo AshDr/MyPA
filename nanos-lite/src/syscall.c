@@ -24,7 +24,7 @@ void do_syscall(Context *c) {
       #endif
       // int status = (int)c->GPR2;
       // halt(status); // need change ?
-      naive_uload(NULL, "/bin/menu");
+      naive_uload(NULL, "/bin/nterm");
       break;
     }
     case SYS_execve: {
