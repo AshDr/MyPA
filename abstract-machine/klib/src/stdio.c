@@ -4,6 +4,11 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
+
+int putchar (int ch) {
+  putch(ch);
+  return ch;
+}
 int int_to_str(int val, char *str) {
   int idx = 0, is_neg = 0;
   if (val == 0) {

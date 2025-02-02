@@ -20,7 +20,8 @@ void do_syscall(Context *c) {
       #ifdef CONFIG_STRACE
       printf("Syscall: SYS_exit\n");
       #endif
-      halt(0); // need change ?
+      int status = (int)c->GPR2;
+      halt(status); // need change ?
       break;
     }
     case SYS_yield: {

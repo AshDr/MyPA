@@ -27,6 +27,8 @@ extern size_t serial_write(const void *buf, size_t offset, size_t len);
 extern size_t events_read(void *buf, size_t offset, size_t len);
 extern size_t dispinfo_read(void *buf, size_t offset, size_t len);
 extern size_t fb_write(const void *buf, size_t offset, size_t len);
+size_t am_ioe_read(void *buf, size_t offset, size_t len);
+size_t am_ioe_write(const void *buf, size_t offset, size_t len);
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
@@ -35,6 +37,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
   {"/dev/events", 0, 0, events_read, invalid_write},
   {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
+  {"/dev/am_ioe", 0, 0, am_ioe_read, am_ioe_write},
 #include "files.h"
 };
 
@@ -46,6 +49,16 @@ void init_fs() {
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+
+size_t am_ioe_read(void *buf, size_t offset, size_t len) {
+  ioe_read(offset, buf);
+  return 0;
+}
+
+size_t am_ioe_write(const void *buf, size_t offset, size_t len) {
+  ioe_write(offset, (void *)buf);
+  return 0;
+}
 
 int fs_open(const char *pathname, int flags, int mode) {
   for (int i = 0; i < sizeof(file_table) / sizeof(Finfo); i++) {
